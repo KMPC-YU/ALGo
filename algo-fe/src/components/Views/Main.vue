@@ -1,16 +1,42 @@
 <template>
   <div>
-    <h1>메인 페이지</h1>
-    <div>
-      <router-link type="button" class="btn btn-primary" to="/login">로그인</router-link>
-      <router-link type="button" class="btn btn-primary" to="/signup">회원가입</router-link>
+    <carousel></carousel>
+    <div class="container">
+      <h2>식품정보 TOP 10</h2>
+      <hr>
+      <div class="row">
+        <div class="col">
+          <food-cards></food-cards>
+        </div>
+        <div class="col">
+          <food-cards></food-cards>
+        </div>
+        <div class="col">
+          <food-cards></food-cards>
+        </div>
+        <div class="col">
+          <food-cards></food-cards>
+        </div>
+        <div class="col">
+          <food-cards></food-cards>
+        </div>
+      </div>
+      <recipe-card></recipe-card>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+import Carousel from "@compo/MainComponents/Carousel.vue";
+import FoodCards from "@compo/MainComponents/FoodCard.vue";
+import RecipeCard from "@compo/MainComponents/RecipeCard.vue";
 
+export default {
+  components: {
+    Carousel,
+    FoodCards,
+    RecipeCard,
+  }
 }
 </script>
 

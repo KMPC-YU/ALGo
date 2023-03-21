@@ -1,12 +1,17 @@
 <template>
+  <Headers></Headers>
   <div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
+import Headers from "@compo/Headers.vue";
 
+export default {
+  components: {
+    Headers,
+  },
 }
 </script>
 
