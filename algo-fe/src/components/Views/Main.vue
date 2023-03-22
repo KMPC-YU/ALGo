@@ -1,27 +1,26 @@
 <template>
-  <div>
-    <carousel></carousel>
+  <div class="wrapper">
     <div class="container">
-      <h2>식품정보 TOP 10</h2>
-      <hr>
-      <div class="row">
-        <div class="col">
-          <food-cards></food-cards>
-        </div>
-        <div class="col">
-          <food-cards></food-cards>
-        </div>
-        <div class="col">
-          <food-cards></food-cards>
-        </div>
-        <div class="col">
-          <food-cards></food-cards>
-        </div>
-        <div class="col">
-          <food-cards></food-cards>
+      <div>
+        <carousel></carousel>
+      </div>
+      <div class="mt-5">
+        <div class="card">
+          <div class="card-body">
+            <food-cards></food-cards>
+          </div>
         </div>
       </div>
-      <recipe-card></recipe-card>
+      <div class="mt-5">
+        <div class="card">
+          <div class="card-body">
+            <recipe-card></recipe-card>
+          </div>
+        </div>
+      </div>
+<!--      <div class="mt-5">-->
+<!--        <category></category>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -30,16 +29,20 @@
 import Carousel from "@compo/MainComponents/Carousel.vue";
 import FoodCards from "@compo/MainComponents/FoodCard.vue";
 import RecipeCard from "@compo/MainComponents/RecipeCard.vue";
+import Category from "@compo/MainComponents/Category.vue";
 
 export default {
   components: {
     Carousel,
     FoodCards,
     RecipeCard,
+    Category,
   }
 }
 </script>
 
 <style scoped>
-
+.card {
+  border-radius: 0;
+}
 </style>
