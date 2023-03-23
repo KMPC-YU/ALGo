@@ -5,9 +5,8 @@
         <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 text-dark text-decoration-none">
          <img src="/ALGo_Logo.ico" alt="ALGo Logo" width="40"/>
         </a>
-
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-secondary active">ALGo</a></li>
+          <li><a href="/" class="nav-link px-2 link-dark">ALGo</a></li>
           <li><a href="/foods" class="nav-link px-2 link-dark">식품정보</a></li>
           <li><a href="/recipes" class="nav-link px-2 link-dark">레시피</a></li>
           <li class="nav-item dropdown">

@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Main from '@views/Main.vue'
+import Main from '@views/main/Main.vue'
 import Login from '@views/Login.vue'
 import Signup from '@views/Signup.vue'
 import ErrorPage from '@views/ErrorPage.vue'

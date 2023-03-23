@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import Carousel from "@compo/MainComponents/Carousel.vue";
-import FoodCards from "@compo/MainComponents/FoodCard.vue";
-import RecipeCard from "@compo/MainComponents/RecipeCard.vue";
-import Category from "@compo/MainComponents/Category.vue";
+import Carousel from "@views/main/components/Carousel.vue";
+import FoodCards from "@views/main/components/FoodCarousel.vue";
+import RecipeCard from "@views/main/components/RecipeCarousel.vue";
+import Category from "@views/main/components/Category.vue";
 
 export default {
   components: {

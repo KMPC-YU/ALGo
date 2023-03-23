@@ -12,7 +12,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@compo': path.resolve(__dirname, './src/components'),
-      '@views': path.resolve(__dirname, './src/components/Views'),
+      '@views': path.resolve(__dirname, './src/components/views'),
     },
   },
   plugins: [vue()]
