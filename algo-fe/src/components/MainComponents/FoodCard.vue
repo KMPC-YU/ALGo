@@ -10,125 +10,6 @@
           <div class="col">
             <div class="card">
               <div class="image-box">
-                <img src="https://biz.chosun.com/resizer/LvSzlb2_EA03pYYKYsm1Rn6B4r0=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/QTAMTTPWHWRL3RWFW5YOJG3FUQ.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
-                <a href="#"><i class="bi bi-heart"></i></a>
-              </div>
-              <div class="card-body">
-                <a href="#">
-                  <h5 class="card-title fw-bold text-center">맛있는피자</h5>
-                </a>
-                <div class="row justify-content-center">
-                  <div class="col-4">
-                    <i class="bi bi-eye"></i>
-                    244
-                  </div>
-                  <div class="col-4">
-                    <i class="bi bi-heart-fill text-danger"></i>
-                    256
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card">
-              <div class="image-box">
-                <img src="https://barunchicken.com/wp-content/uploads/2022/07/%EA%B3%A8%EB%93%9C%EC%B9%98%ED%82%A8-2-1076x807.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
-                <a href="#"><i class="bi bi-heart"></i></a>
-              </div>
-              <div class="card-body">
-                <a href="#">
-                  <h5 class="card-title fw-bold text-center">맛있는치킨</h5>
-                </a>
-                <div class="row justify-content-center">
-                  <div class="col-4">
-                    <i class="bi bi-eye"></i>
-                    244
-                  </div>
-                  <div class="col-4">
-                    <i class="bi bi-heart-fill text-danger"></i>
-                    256
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card">
-              <div class="image-box">
-                <img src="http://th1.tmon.kr/thumbs/image/91a/c0c/72d/56a6b2501_700x700_95_FIT.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
-                <a href="#"><i class="bi bi-heart"></i></a>
-              </div>
-              <div class="card-body">
-                <a href="#">
-                  <h5 class="card-title fw-bold text-center">맛있는보쌈</h5>
-                </a>
-                <div class="row justify-content-center">
-                  <div class="col-4">
-                    <i class="bi bi-eye"></i>
-                    244
-                  </div>
-                  <div class="col-4">
-                    <i class="bi bi-heart-fill text-danger"></i>
-                    256
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card">
-              <div class="image-box">
-                <img src="https://doewxs707ovkc.cloudfront.net/v3/prod/image/item/mainpage/907/ad4474bef39c4167b84477eaa7a5052f20210708171733." class="card-img-top" alt="Hollywood Sign on The Hill"/>
-                <a href="#"><i class="bi bi-heart"></i></a>
-              </div>
-              <div class="card-body">
-                <a href="#">
-                  <h5 class="card-title fw-bold text-center">맛있는떡볶이</h5>
-                </a>
-                <div class="row justify-content-center">
-                  <div class="col-4">
-                    <i class="bi bi-eye"></i>
-                    244
-                  </div>
-                  <div class="col-4">
-                    <i class="bi bi-heart-fill text-danger"></i>
-                    256
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card">
-              <div class="image-box">
-                <img src="https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000370/img/basic/a0000370_main.jpg?" class="card-img-top" alt="Hollywood Sign on The Hill"/>
-                <a href="#"><i class="bi bi-heart"></i></a>
-              </div>
-              <div class="card-body">
-                <a href="#">
-                  <h5 class="card-title fw-bold text-center">맛있는초밥</h5>
-                </a>
-                <div class="row justify-content-center">
-                  <div class="col-4">
-                    <i class="bi bi-eye"></i>
-                    244
-                  </div>
-                  <div class="col-4">
-                    <i class="bi bi-heart-fill text-danger"></i>
-                    256
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-          <div class="col">
-            <div class="card">
-              <div class="image-box">
                 <img src="http://th3.tmon.kr/thumbs/image/48c/025/b81/b8eaaaa7d_600x600_95_FIT.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
                 <a href="#"><i class="bi bi-heart"></i></a>
               </div>
@@ -227,6 +108,125 @@
               <div class="card-body">
                 <a href="#">
                   <h5 class="card-title fw-bold text-center">맛있는갈배</h5>
+                </a>
+                <div class="row justify-content-center">
+                  <div class="col-4">
+                    <i class="bi bi-eye"></i>
+                    244
+                  </div>
+                  <div class="col-4">
+                    <i class="bi bi-heart-fill text-danger"></i>
+                    256
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+          <div class="col">
+            <div class="card">
+              <div class="image-box">
+                <img src="https://biz.chosun.com/resizer/LvSzlb2_EA03pYYKYsm1Rn6B4r0=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/QTAMTTPWHWRL3RWFW5YOJG3FUQ.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                <a href="#"><i class="bi bi-heart"></i></a>
+              </div>
+              <div class="card-body">
+                <a href="#">
+                  <h5 class="card-title fw-bold text-center">맛있는피자</h5>
+                </a>
+                <div class="row justify-content-center">
+                  <div class="col-4">
+                    <i class="bi bi-eye"></i>
+                    244
+                  </div>
+                  <div class="col-4">
+                    <i class="bi bi-heart-fill text-danger"></i>
+                    256
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="image-box">
+                <img src="https://barunchicken.com/wp-content/uploads/2022/07/%EA%B3%A8%EB%93%9C%EC%B9%98%ED%82%A8-2-1076x807.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                <a href="#"><i class="bi bi-heart"></i></a>
+              </div>
+              <div class="card-body">
+                <a href="#">
+                  <h5 class="card-title fw-bold text-center">맛있는치킨</h5>
+                </a>
+                <div class="row justify-content-center">
+                  <div class="col-4">
+                    <i class="bi bi-eye"></i>
+                    244
+                  </div>
+                  <div class="col-4">
+                    <i class="bi bi-heart-fill text-danger"></i>
+                    256
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="image-box">
+                <img src="http://th1.tmon.kr/thumbs/image/91a/c0c/72d/56a6b2501_700x700_95_FIT.jpg" class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                <a href="#"><i class="bi bi-heart"></i></a>
+              </div>
+              <div class="card-body">
+                <a href="#">
+                  <h5 class="card-title fw-bold text-center">맛있는보쌈</h5>
+                </a>
+                <div class="row justify-content-center">
+                  <div class="col-4">
+                    <i class="bi bi-eye"></i>
+                    244
+                  </div>
+                  <div class="col-4">
+                    <i class="bi bi-heart-fill text-danger"></i>
+                    256
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="image-box">
+                <img src="https://doewxs707ovkc.cloudfront.net/v3/prod/image/item/mainpage/907/ad4474bef39c4167b84477eaa7a5052f20210708171733." class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                <a href="#"><i class="bi bi-heart"></i></a>
+              </div>
+              <div class="card-body">
+                <a href="#">
+                  <h5 class="card-title fw-bold text-center">맛있는떡볶이</h5>
+                </a>
+                <div class="row justify-content-center">
+                  <div class="col-4">
+                    <i class="bi bi-eye"></i>
+                    244
+                  </div>
+                  <div class="col-4">
+                    <i class="bi bi-heart-fill text-danger"></i>
+                    256
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="image-box">
+                <img src="https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000370/img/basic/a0000370_main.jpg?" class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                <a href="#"><i class="bi bi-heart"></i></a>
+              </div>
+              <div class="card-body">
+                <a href="#">
+                  <h5 class="card-title fw-bold text-center">맛있는초밥</h5>
                 </a>
                 <div class="row justify-content-center">
                   <div class="col-4">
