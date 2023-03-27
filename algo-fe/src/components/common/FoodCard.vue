@@ -48,12 +48,7 @@ export default {
 
 <style scoped>
 .card {
-  -webkit-transition: all 0.2s ease-in;
-  -moz-transition: all 0.2s ease-in;
-  -ms-transition: all 0.2s ease-in;
-  -o-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
-  /*cursor: pointer;*/
   box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
   border: none;
   border-radius: 0;
@@ -71,29 +66,17 @@ export default {
   right: 15px;
   color: #fff;
   font-size: 25px;
-  -webkit-transition: all 0.1s;
-  transition: all 0.1s;
 }
 .image-box {
-  background: #ffffff;
   overflow: hidden;
-  /*box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.50);*/
-  /*border-radius: 5px;*/
 }
 .image-box img {
-  -webkit-transition:all .9s ease;
-  -moz-transition:all .9s ease;
-  -o-transition:all .9s ease;
-  -ms-transition:all .9s ease;
+  transition:all .9s ease;
   width: 100%;
   height: 200px;
 }
 .image-box:hover img {
   opacity: 0.7;
-  -webkit-transform:scale(1.15);
-  -moz-transform:scale(1.15);
-  -ms-transform:scale(1.15);
-  -o-transform:scale(1.15);
   transform:scale(1.15);
 }
 </style>

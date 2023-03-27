@@ -4,99 +4,27 @@
   <div id="foodCarousel" class="carousel slide">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-          <div class="col">
+        <div class="row row-cols-1 row-cols-md-4 row-cols-lg-5 g-4">
+          <div class="col" v-for="(foods, index) in bestFoods[0]" :key="index">
             <food-card
-                :img-src="'http://th3.tmon.kr/thumbs/image/48c/025/b81/b8eaaaa7d_600x600_95_FIT.jpg'"
-                :img-alt="'coke'"
-                :name="'맛있는콜라'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'https://www.ccbk.co.kr/images/product/detail/product112.jpg'"
-                :img-alt="'sprite'"
-                :name="'맛있는스프라이트'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'https://sitem.ssgcdn.com/37/63/81/item/1000034816337_i1_1100.jpg'"
-                :img-alt="'welchi'"
-                :name="'맛있는웰치스'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'https://cdn.emetro.co.kr/data2/content/image/2018/11/15/0540/20181115000163.jpg'"
-                :img-alt="'pokari'"
-                :name="'맛있는포카리'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'http://image.auction.co.kr/itemimage/17/b0/8f/17b08f2a56.jpg'"
-                :img-alt="'garbe'"
-                :name="'맛있는갈배'"
-                :views="'15'"
-                :likes="'200'">
+              :img-src=foods.imgUrl
+              :img-alt="''"
+              :name=foods.foodName
+              :views=foods.views
+              :likes="foods.likes">
             </food-card>
           </div>
         </div>
       </div>
       <div class="carousel-item">
         <div class="row row-cols-1 row-cols-md-5 g-4">
-          <div class="col">
+          <div class="col" v-for="(foods, index) in bestFoods[1]" :key="index">
             <food-card
-                :img-src="'https://biz.chosun.com/resizer/LvSzlb2_EA03pYYKYsm1Rn6B4r0=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/QTAMTTPWHWRL3RWFW5YOJG3FUQ.jpg'"
-                :img-alt="'pizza'"
-                :name="'맛있는피자'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'https://barunchicken.com/wp-content/uploads/2022/07/%EA%B3%A8%EB%93%9C%EC%B9%98%ED%82%A8-2-1076x807.jpg'"
-                :img-alt="'chicken'"
-                :name="'맛있는치킨'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'http://th1.tmon.kr/thumbs/image/91a/c0c/72d/56a6b2501_700x700_95_FIT.jpg'"
-                :img-alt="'bossam'"
-                :name="'맛있는보쌈'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'https://doewxs707ovkc.cloudfront.net/v3/prod/image/item/mainpage/907/ad4474bef39c4167b84477eaa7a5052f20210708171733.'"
-                :img-alt="'ddeuk'"
-                :name="'맛있는떡볶이'"
-                :views="'15'"
-                :likes="'200'">
-            </food-card>
-          </div>
-          <div class="col">
-            <food-card
-                :img-src="'https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000370/img/basic/a0000370_main.jpg?'"
-                :img-alt="'chobap'"
-                :name="'맛있는초밥'"
-                :views="'15'"
-                :likes="'200'">
+                :img-src=foods.imgUrl
+                :img-alt="''"
+                :name=foods.foodName
+                :views=foods.views
+                :likes="foods.likes">
             </food-card>
           </div>
         </div>
@@ -113,9 +41,33 @@
 
 <script>
 import FoodCard from "@compo/common/FoodCard.vue";
+import useAxios from '@/modules/axios'
+import { onMounted, ref } from "vue";
+
 export default {
   components: {
     FoodCard,
+  },
+  setup() {
+    const { axiosGet } = useAxios()
+
+    onMounted(() => {
+      getFoods()
+    })
+
+    const bestFoods = ref([])
+    const getFoods = () => {
+      axiosGet('http://localhost:3001/bestfoods', (res) => {
+        bestFoods.value[0] = res.data.slice(0, 5)
+        bestFoods.value[1] = res.data.slice(5, 10)
+      }, (err) => {
+        console.error(err)
+      })
+    }
+
+    return {
+      bestFoods
+    }
   }
 }
 </script>
