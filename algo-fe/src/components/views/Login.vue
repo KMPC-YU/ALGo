@@ -2,11 +2,11 @@
   <div class="content">
     <div class="container">
       <div class="row">
-        <div class="col-md-6 contents">
+        <div class="col-md-6 mx-auto contents">
           <div class="row justify-content-center">
             <div class="col-md-8">
               <div class="mb-4">
-              <h3>Log In</h3>
+              <h3>Sign In</h3>
               <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
             </div>
             <form action="#" method="post">
@@ -121,10 +121,10 @@ h2 {
   .content .contents .form-group, .content .bg .form-group {
     overflow: hidden;
     margin-bottom: 0;
-    padding: 15px 15px;
+    padding: 20px 15px;
     border-bottom: none;
     position: relative;
-    background: #edf2f5;
+    background: #f8fafb;
     border-bottom: 1px solid #e6edf1; }
     .content .contents .form-group label, .content .bg .form-group label {
       position: absolute;
