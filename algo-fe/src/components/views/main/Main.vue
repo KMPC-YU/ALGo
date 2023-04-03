@@ -7,14 +7,14 @@
       <div class="mt-5">
         <div class="card">
           <div class="card-body">
-            <food-cards></food-cards>
+            <food-carousel></food-carousel>
           </div>
         </div>
       </div>
       <div class="mt-5">
         <div class="card">
           <div class="card-body">
-            <recipe-card></recipe-card>
+            <recipe-carousel></recipe-carousel>
           </div>
         </div>
       </div>
@@ -26,16 +26,16 @@
 </template>
 
 <script>
-import Carousel from "@views/main/components/Carousel.vue";
-import FoodCards from "@views/main/components/FoodCarousel.vue";
-import RecipeCard from "@views/main/components/RecipeCarousel.vue";
-import Category from "@views/main/components/Category.vue";
+import Carousel from './components/MainCarousel.vue'
+import FoodCarousel from "./components/FoodCarousel.vue";
+import RecipeCarousel from "./components/RecipeCarousel.vue";
+import Category from "./components/AllergyCategory.vue";
 
 export default {
   components: {
     Carousel,
-    FoodCards,
-    RecipeCard,
+    FoodCarousel,
+    RecipeCarousel,
     Category,
   }
 }
