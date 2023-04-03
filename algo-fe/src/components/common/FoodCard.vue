@@ -54,6 +54,7 @@ export default {
   border-radius: 0;
 }
 .card:hover {
+  transform: scale(1.02);
   box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.50);
 }
 .card .card-body a {
