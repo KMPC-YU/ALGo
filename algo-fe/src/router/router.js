@@ -3,14 +3,16 @@ import Main from '@views/main/Main.vue'
 import Login from '@views/Login.vue'
 import Signup from '@views/Signup.vue'
 import ErrorPage from '@views/ErrorPage.vue'
+import FindPassword from '@views/findPassword/index.vue'
 
 const router = createRouter({
     history : createWebHistory(),
     routes : [
         { path : "/", name : "Main", component : Main },
-        { path : "/:pathMatch(.*)", name : "not-found", component : ErrorPage},
-        { path : "/login", name : 'Login', component : Login},
-        { path : "/signup", name : "Signup", component: Signup},
+        { path : "/:pathMatch(.*)", name : "not-found", component : ErrorPage },
+        { path : "/login", name : "Login", component : Login },
+        { path : "/signup", name : "Signup", component: Signup },
+        { path: "/findpw", name: "FindPassword", component: FindPassword/*, beforeEnter: isLogin()*/ },
     ]
 });
 
