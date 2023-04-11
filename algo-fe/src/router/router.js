@@ -1,8 +1,8 @@
-import { createWebHistory, createRouter } from "vue-router";
-import Main from '@views/main/Main.vue'
+import { createWebHistory, createRouter } from "vue-router"
+import Main from "@views/main/Main.vue"
 import Login from '@views/Login.vue'
-import Signup from '@views/Signup.vue'
-import ErrorPage from '@views/ErrorPage.vue'
+import SignUp from "@views/signup/SignUp.vue"
+import ErrorPage from "@compo/common/ErrorPage.vue"
 import FindPassword from '@views/findPassword/index.vue'
 
 const router = createRouter({
@@ -11,7 +11,7 @@ const router = createRouter({
         { path : "/", name : "Main", component : Main },
         { path : "/:pathMatch(.*)", name : "not-found", component : ErrorPage },
         { path : "/login", name : "Login", component : Login },
-        { path : "/signup", name : "Signup", component: Signup },
+        { path : "/signup", name : "Signup", component: SignUp },
         { path: "/findpw", name: "FindPassword", component: FindPassword/*, beforeEnter: isLogin()*/ },
     ]
 });
