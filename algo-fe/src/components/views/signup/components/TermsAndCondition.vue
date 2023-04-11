@@ -2,7 +2,7 @@
   <div class="container">
     <div class="card d-flex justify-content-center align-items-center">
       <div class="logo text-center">
-        <img src="/public/ALGo_Logo.ico" alt="" width="50">
+        <img src="/ALGo_Logo.ico" alt="" width="50">
         <span class="fs-1 align-middle"> ALGO</span>
       </div>
       <div class="form-check mb-4 mt-4">
