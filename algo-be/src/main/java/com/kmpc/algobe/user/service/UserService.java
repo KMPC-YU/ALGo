@@ -1,5 +1,7 @@
 package com.kmpc.algobe.user.service;
 
+import com.kmpc.algobe.security.provider.JwtProvider;
+import com.kmpc.algobe.user.domain.dto.LoginRequestDto;
 import com.kmpc.algobe.user.domain.dto.SignUpRequestDto;
 import com.kmpc.algobe.user.domain.entity.LoginType;
 import com.kmpc.algobe.user.domain.entity.User;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    private final JwtProvider jwtProvider;
     private final BCryptPasswordEncoder encoder;
     private final UserRepository userRepository;
 
@@ -41,5 +45,14 @@ public class UserService {
         userRepository.save(user);
 
         return true;
+    }
+
+    public String login(LoginRequestDto loginRequestDto) {
+        User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(() -> new RuntimeException("존재하지 않는 아이디입니다."));
+        if(!encoder.matches(loginRequestDto.getPassword(), user.getPassword())){
+            throw new RuntimeException("비밀번호가 틀렸습니다.");
+        }
+
+        return jwtProvider.generateToken(user.getUsername(), user.getNickname(), user.getGrade().name());
     }
 }
