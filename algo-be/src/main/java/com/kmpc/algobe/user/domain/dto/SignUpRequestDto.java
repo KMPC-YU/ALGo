@@ -29,11 +29,14 @@ public class SignUpRequestDto {
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String email;
 
+    @NotBlank(message = "인증번호를 입력해주세요.")
+    private String code;
+
     @NotBlank(message="닉네임을 입력해주세요")
     @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\\d]{2,15}$", message = "닉네임은 한글, 영어, 숫자를 사용할 수 있으며 2자 이상 15자 이내로 입력해주세요.")
     private String nickname;
 
-    public User toUserEntity(BCryptPasswordEncoder encoder){
+    public User toUserEntity(BCryptPasswordEncoder encoder){ // TODO Mapper 사용하기
         return User.builder().username(username).password(encoder.encode(password)).email(email).nickname(nickname).loginType(LoginType.LOCAL).grade(Grade.USER).build();
     }
 }

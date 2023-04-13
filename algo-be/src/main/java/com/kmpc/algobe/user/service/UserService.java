@@ -1,5 +1,6 @@
 package com.kmpc.algobe.user.service;
 
+import com.kmpc.algobe.redis.util.RedisUtil;
 import com.kmpc.algobe.security.provider.JwtProvider;
 import com.kmpc.algobe.user.domain.dto.LoginRequestDto;
 import com.kmpc.algobe.user.domain.dto.SignUpRequestDto;
@@ -20,11 +21,14 @@ public class UserService {
     private final JwtProvider jwtProvider;
     private final BCryptPasswordEncoder encoder;
     private final UserRepository userRepository;
+    private final RedisUtil redisUtil;
 
     @Transactional
     public Boolean signUp(SignUpRequestDto signUpRequestDto) {
         // TODO 이메일 인증 확인 후 로직 처리
-        log.info("password = {}, passwordConfirm = {}", signUpRequestDto.getPassword(), signUpRequestDto.getPasswordConfirm());
+        if (!redisUtil.getData(signUpRequestDto.getEmail()).equals(signUpRequestDto.getCode()))
+            throw new RuntimeException("인증번호가 일치하지 않습니다.");
+
         if (!signUpRequestDto.getPassword().equals(signUpRequestDto.getPasswordConfirm())) {
             throw new RuntimeException("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
         }
@@ -43,6 +47,7 @@ public class UserService {
 
         User user = signUpRequestDto.toUserEntity(encoder);
         userRepository.save(user);
+        redisUtil.deleteData(signUpRequestDto.getEmail()+"_count");
 
         return true;
     }

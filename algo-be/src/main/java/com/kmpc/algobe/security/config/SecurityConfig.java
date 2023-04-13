@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/v1/boards").access(userAuth) // 시큐리티가 인증한 사용자
-                .requestMatchers("/api/v1/signUp", "/api/v1/login").permitAll()
+                .requestMatchers("/api/v1/signUp", "/api/v1/login", "/api/v1/emails", "/api/v1/validate").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
