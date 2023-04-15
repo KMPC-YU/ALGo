@@ -1,4 +1,4 @@
-import { axios } from '@bundled-es-modules/axios'
+import axios from 'axios'
 
 export default () => {
     const CONFIG = {
@@ -9,7 +9,7 @@ export default () => {
         withCredentials: true,
     }
     const createURL = (url) => {
-        return url.toString().startsWith('http') ? url : process.env.BACKEND_URL + url
+        return url.toString().startsWith('http') ? url : import.meta.env.VITE_APP_BACKEND_URL + url
     }
 
     const axiosGet = async (url, onSuccess = null, onFailed = null) => {
