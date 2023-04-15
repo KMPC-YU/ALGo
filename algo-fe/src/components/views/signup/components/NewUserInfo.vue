@@ -6,7 +6,7 @@
         <span class="fs-1 align-middle"> ALGO</span>
       </div>
       <div class="card-body">
-        <form @submit.prevent="signup">
+        <div>
           <div class="mb-3 ">
             <label for="username" class="form-label fw-bold">아이디</label>
             <input type="text" v-model="username" id="username" maxlength="20" @blur="usernameValidCheck"
@@ -36,12 +36,21 @@
           </div>
           <div class="mb-3">
             <label for="email" class="form-label fw-bold">이메일</label>
-            <input type="text" v-model="email" id="email" maxlength="40" @blur="emailValidCheck"
-                   class="form-control form-control-lg"
-                   :class="{'': emailValid === 1, 'is-valid': emailValid === 2, 'is-invalid': emailValid === 3}">
-            <div class="invalid-feedback">
-              {{ emailMessage }}
+            <div class="row">
+              <div class="col-lg-8">
+                <input type="text" v-model="email" id="email" maxlength="40" @blur="emailValidCheck"
+                       class="form-control form-control-lg"
+                       :class="{'': emailValid === 1, 'is-valid': emailValid === 2, 'is-invalid': emailValid === 3}">
+                <div class="invalid-feedback">
+                  {{ emailMessage }}
+                </div>
+              </div>
+              <div class="col-lg-4 mt-2 mt-lg-0">
+                <button class="btn btn-lg btn-primary" @click="verifyEmail">인증번호 받기</button>
+              </div>
             </div>
+            <input type="text" v-model="emailCode" class="form-control form-control-lg mt-2" @blur="verifyEmailCode"
+                   placeholder="인증번호를 입력하세요" :disabled="sendCodeToEmail">
           </div>
           <div class="mb-5">
             <label for="nickname" class="form-label fw-bold">닉네임</label>
@@ -65,21 +74,23 @@
             </div>
           </div>
           <div>
-            <button type="submit" class="btn btn-primary btn-lg form-control">가입하기</button>
+            <button @click="signup" class="btn btn-primary btn-lg form-control">가입하기</button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import useAxios from '@/modules/axios'
 import Swal from 'sweetalert2'
 export default {
   setup() {
     const router = useRouter()
+    const { axiosPost } = useAxios()
 
     const username = ref('')
     const password = ref('')
@@ -92,6 +103,10 @@ export default {
     const password2Valid = ref(1)
     const emailValid = ref(1)
     const nicknameValid = ref(1)
+
+    const sendCodeToEmail = ref(true)
+    const emailCode = ref('')
+    const emailCodeValid = ref(1)
 
     const usernameMessage = ref('')
     const passwordMessage = ref('')
@@ -123,6 +138,38 @@ export default {
       { name: "vegetables", mean: "채소", src: "/src/assets/allergy_icon/vegetables.png", selected: false },
       { name: "wheat", mean: "밀", src: "/src/assets/allergy_icon/wheat.png", selected: false },
     ]);
+
+    const verifyEmail = () => {
+      emailValidCheck()
+      if (emailValid.value === 2) {
+        axiosPost('/api/v1/emails', {
+          email: email.value,
+        }, (res) => {
+          Swal.fire({ title: res.data })
+          sendCodeToEmail.value = false
+        }, (err) => {
+          console.error(err)
+        })
+      }
+    }
+
+    const verifyEmailCode = () => {
+      emailCodeValid.value = 1;
+      if (emailValid.value === 2 && !sendCodeToEmail.value && emailCode.value.length === 6) {
+        axiosPost('/api/v1/validate', {
+          email: email.value,
+          code: emailCode.value,
+        }, (res) => {
+          console.log(res)
+          if(res.status === 200) {
+            Swal.fire({ icon: "success", title: res.data })
+            emailCodeValid.value = 2;
+          }
+        }, (err) => {
+          Swal.fire({ icon: "error", title: err.response.data })
+        })
+      }
+    }
 
     const usernameValidCheck = () => {
       // Todo : 아이디 중복확인 API 추가
@@ -200,7 +247,7 @@ export default {
         showConfirmButton: false,
         timer: 2000,
       }).then(() => {
-        router.push({ name: 'Login'})
+        // router.push({ name: 'Login'})
       });
       if (usernameValid.value === 2 && passwordValid.value === 2
           && password2Valid.value === 2 && emailValid.value === 2 && nicknameValid.value === 2) {
@@ -210,11 +257,16 @@ export default {
       }
     }
 
+    onMounted(() => {
+      window.scrollTo(0, 0);
+    })
+
     return {
       allergies, selectedAllergies, username, password, password2, email, nickname,
       usernameValid, passwordValid, password2Valid, emailValid, nicknameValid,
       usernameMessage, passwordMessage, password2Message, emailMessage, nicknameMessage,
       signup, usernameValidCheck, passwordValidCheck, password2ValidCheck, emailValidCheck, nicknameValidCheck,
+      verifyEmail, sendCodeToEmail, verifyEmailCode, emailCode,
     }
   }
 }
@@ -233,7 +285,7 @@ export default {
   padding: 20px;
 }
 .card-body {
-  max-width: 500px;
+  max-width: 510px;
 }
 .allergy-icon {
   opacity:0.3;

@@ -6,31 +6,31 @@
           <div class="row justify-content-center">
             <div class="col-md-8">
               <div class="mb-4">
-              <h3>Sign In</h3>
+              <h3>로그인</h3>
               <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
             </div>
             <form action="#" method="post">
               <div class="form-group first" :class="idEmpty">
-                <label for="username">Username</label>
+                <label for="username">아이디</label>
                 <input type="text" class="form-control" id="username" v-model="username">
 
               </div>
               <div class="form-group last mb-4" :class="pwEmpty">
-                <label for="password">Password</label>
+                <label for="password">비밀번호</label>
                 <input type="password" class="form-control" id="password" v-model="password">
                 
               </div>
               
               <div class="d-flex mb-5 align-items-center">
-                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                <label class="control control--checkbox mb-0"><span class="caption">로그인 상태 유지</span>
                   <input type="checkbox" checked="checked"/>
                   <div class="control__indicator"></div>
                 </label>
-                <span class="ms-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
+                <span class="ms-auto"><a href="#" class="forgot-pass">비밀번호 찾기</a></span>
               </div>
 
               <div class="d-grid">
-                <input type="button" value="Log In" class="btn btn-primary">
+                <input type="button" value="Log In" class="btn btn-primary" @click="login()">
               </div>
 
               <span class="d-block text-center my-4 text-secondary">&mdash; or login with &mdash;</span>
@@ -59,6 +59,7 @@
 
 <script>
 import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   setup() {
@@ -73,11 +74,22 @@ export default {
       return password.value === '' ? '' : 'field--not-empty'
     })
 
+    const store = useStore()
+    const login = () => {
+      store.dispatch('login', {
+        username: username.value,
+        password: password.value
+      }).catch((err) => {
+        console.error(err)
+      })
+    }
+
     return {
       username,
       password,
       idEmpty,
       pwEmpty,
+      login,
     }
   }
 }

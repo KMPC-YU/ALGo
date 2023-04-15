@@ -57,12 +57,12 @@ export default {
 
     const bestFoods = ref([])
     const getFoods = () => {
-      axiosGet('http://localhost:3001/bestfoods', (res) => {
-        bestFoods.value[0] = res.data.slice(0, 5)
-        bestFoods.value[1] = res.data.slice(5, 10)
-      }, (err) => {
-        console.error(err)
-      })
+      // axiosGet('http://localhost:3001/bestfoods', (res) => {
+      //   bestFoods.value[0] = res.data.slice(0, 5)
+      //   bestFoods.value[1] = res.data.slice(5, 10)
+      // }, (err) => {
+      //   console.error(err)
+      // })
     }
 
     return {
