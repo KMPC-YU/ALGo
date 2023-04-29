@@ -1,16 +1,26 @@
 package com.kmpc.algobe.user.controller;
 
 import com.kmpc.algobe.annotation.CurrentUser;
+import com.kmpc.algobe.security.dto.JwtCookie;
+import com.kmpc.algobe.security.dto.LoginResponseDto;
+import com.kmpc.algobe.security.provider.JwtProvider;
 import com.kmpc.algobe.user.domain.dto.*;
+import com.kmpc.algobe.user.domain.entity.User;
 import com.kmpc.algobe.user.service.EmailService;
 import com.kmpc.algobe.user.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+
+@Slf4j
+@Tag(name="User Controller", description = "회원인증 관련 컨트롤러")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -18,6 +28,7 @@ public class UserController {
 
     private final UserService userService;
     private final EmailService emailService;
+    private final JwtProvider jwtProvider;
 
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto){
@@ -29,8 +40,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
-        String token = userService.login(loginRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+        LoginResponseDto token = userService.login(loginRequestDto);
+        JwtCookie jwtCookie = jwtProvider.setJwtCookie(token);
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE,
+                jwtCookie.getAccessCookie().toString(),
+                jwtCookie.getRefreshCookie().toString())
+                .body(token.getRole());
     }
 
     @PostMapping("/emails")

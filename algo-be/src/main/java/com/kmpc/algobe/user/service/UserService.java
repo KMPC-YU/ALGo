@@ -3,8 +3,8 @@ package com.kmpc.algobe.user.service;
 import com.kmpc.algobe.redis.util.RedisUtil;
 import com.kmpc.algobe.security.provider.JwtProvider;
 import com.kmpc.algobe.user.domain.dto.LoginRequestDto;
+import com.kmpc.algobe.security.dto.LoginResponseDto;
 import com.kmpc.algobe.user.domain.dto.SignUpRequestDto;
-import com.kmpc.algobe.user.domain.entity.LoginType;
 import com.kmpc.algobe.user.domain.entity.User;
 import com.kmpc.algobe.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ public class UserService {
 
     @Transactional
     public Boolean signUp(SignUpRequestDto signUpRequestDto) {
-        // TODO 이메일 인증 확인 후 로직 처리
         if (!redisUtil.getData(signUpRequestDto.getEmail()).equals(signUpRequestDto.getCode()))
             throw new RuntimeException("인증번호가 일치하지 않습니다.");
 
@@ -47,12 +46,11 @@ public class UserService {
 
         User user = signUpRequestDto.toUserEntity(encoder);
         userRepository.save(user);
-        redisUtil.deleteData(signUpRequestDto.getEmail()+"_count");
 
         return true;
     }
 
-    public String login(LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(() -> new RuntimeException("존재하지 않는 아이디입니다."));
         if(!encoder.matches(loginRequestDto.getPassword(), user.getPassword())){
             throw new RuntimeException("비밀번호가 틀렸습니다.");
