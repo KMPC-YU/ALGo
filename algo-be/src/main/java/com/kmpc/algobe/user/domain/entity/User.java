@@ -34,6 +34,10 @@ public class User extends BaseTimeEntity {
     @NotNull
     private String email;
 
+    @Column(name="user_allergy_info")
+    @NotNull
+    private Integer userAllergyInfo;
+
     @Column(name = "login_type")
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -48,11 +52,12 @@ public class User extends BaseTimeEntity {
     private String profileImg;
 
     @Builder
-    public User(String username, String password, String nickname, String email, LoginType loginType, Grade grade) {
+    public User(String username, String password, String nickname, String email, Integer userAllergyInfo, LoginType loginType, Grade grade) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
+        this.userAllergyInfo = userAllergyInfo;
         this.loginType = loginType;
         this.grade = grade;
     }
@@ -72,6 +77,12 @@ public class User extends BaseTimeEntity {
     public User updateNickname(String nickname) {
         if(nickname != null)
             this.nickname = nickname;
+        return this;
+    }
+
+    public User updateAllergyInfo(Integer allergyInfo){
+        if(allergyInfo != null)
+            this.userAllergyInfo = allergyInfo;
         return this;
     }
 

@@ -1,5 +1,7 @@
 package com.kmpc.algobe.user.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kmpc.algobe.allergy.AllergyType;
 import com.kmpc.algobe.user.domain.entity.Grade;
 import com.kmpc.algobe.user.domain.entity.LoginType;
 import com.kmpc.algobe.user.domain.entity.User;
@@ -11,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpRequestDto {
@@ -21,6 +25,7 @@ public class SignUpRequestDto {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,}$", message = "비밀번호는 영어, 숫자, 특수문자를 포함하여 8자리 이상으로 입력해주세요.")
     private String password;
 
+    @JsonProperty("password_confirm")
     @NotBlank
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,}$", message = "비밀번호는 영어, 숫자, 특수문자를 포함하여 8자리 이상으로 입력해주세요.")
     private String passwordConfirm;
@@ -36,7 +41,13 @@ public class SignUpRequestDto {
     @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\\d]{2,15}$", message = "닉네임은 한글, 영어, 숫자를 사용할 수 있으며 2자 이상 15자 이내로 입력해주세요.")
     private String nickname;
 
+    @JsonProperty("allergy_type")
+    private List<AllergyType> allergyTypeList;
+
     public User toUserEntity(BCryptPasswordEncoder encoder){ // TODO Mapper 사용하기
-        return User.builder().username(username).password(encoder.encode(password)).email(email).nickname(nickname).loginType(LoginType.LOCAL).grade(Grade.USER).build();
+        Integer allergyInfo = allergyTypeList.stream()
+                .mapToInt(AllergyType::getAllergyBit)
+                .sum();
+        return User.builder().username(username).password(encoder.encode(password)).email(email).nickname(nickname).userAllergyInfo(allergyInfo).loginType(LoginType.LOCAL).grade(Grade.USER).build();
     }
 }
