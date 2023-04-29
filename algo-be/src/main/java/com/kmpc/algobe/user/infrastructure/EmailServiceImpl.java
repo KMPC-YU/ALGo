@@ -18,13 +18,20 @@ public class EmailServiceImpl implements EmailService {
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
 
+    private static final Long expireTime = 600L;
+
     @Override
     public void sendEmail(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         });
+
+        if(redisUtil.existData(email)){
+            redisUtil.deleteData(email);
+            redisUtil.deleteData(email+"_count");
+        }
+
         String code = RandomCodeUtil.createCode();
-        long expireTime = 600L; // 10분
 
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -41,8 +48,8 @@ public class EmailServiceImpl implements EmailService {
         String emailCount = email + "_count";
 
         redisUtil.setDataExpire(email, code, expireTime);
-        redisUtil.setData(emailCount, String.valueOf(0));
-        javaMailSender.send(message);
+        redisUtil.setDataExpire(emailCount, String.valueOf(0), expireTime);
+        javaMailSender.send(message); // TODO Gmail 발송 확인
     }
 
     @Override
@@ -59,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
         if (codeFoundByEmail.equals(code))
             return ResultVerifyCode.VALID;
         else{
-            redisUtil.setData(emailCount, String.valueOf(countFoundByEmail + 1));
+            redisUtil.setDataExpire(emailCount, String.valueOf(countFoundByEmail + 1), expireTime);
             return ResultVerifyCode.INVALID;
         }
     }
