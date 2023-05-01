@@ -1,42 +1,42 @@
 <template>
-  <h3 class="font-weight-bold mb-2">식품 BEST 10</h3>
-  <hr>
-  <div id="foodCarousel" class="carousel slide">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <div class="row row-cols-1 row-cols-md-4 row-cols-lg-5 g-4">
-          <div class="col" v-for="(foods, index) in bestFoods[0]" :key="index">
-            <food-card
-              :img-src=foods.imgUrl
-              :img-alt="''"
-              :name=foods.foodName
-              :views=foods.views
-              :likes="foods.likes">
-            </food-card>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-          <div class="col" v-for="(foods, index) in bestFoods[1]" :key="index">
-            <food-card
-                :img-src=foods.imgUrl
-                :img-alt="''"
-                :name=foods.foodName
-                :views=foods.views
-                :likes="foods.likes">
-            </food-card>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#foodCarousel" data-bs-slide="prev">
-      <i class="bi bi-chevron-left text-black"></i>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#foodCarousel" data-bs-slide="next">
-      <i class="bi bi-chevron-right text-black"></i>
-    </button>
-  </div>
+<!--  <h3 class="font-weight-bold mb-2">식품 BEST 10</h3>-->
+<!--  <hr>-->
+<!--  <div id="foodCarousel" class="carousel slide">-->
+<!--    <div class="carousel-inner">-->
+<!--      <div class="carousel-item active">-->
+<!--        <div class="row row-cols-1 row-cols-md-4 row-cols-lg-5 g-4">-->
+<!--          <div class="col" v-for="(foods, index) in bestFoods[0]" :key="index">-->
+<!--            <food-card-->
+<!--              :img-src=foods.imgUrl-->
+<!--              :img-alt="''"-->
+<!--              :name=foods.foodName-->
+<!--              :views=foods.views-->
+<!--              :likes="foods.likes">-->
+<!--            </food-card>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="carousel-item">-->
+<!--        <div class="row row-cols-1 row-cols-md-5 g-4">-->
+<!--          <div class="col" v-for="(foods, index) in bestFoods[1]" :key="index">-->
+<!--            <food-card-->
+<!--                :img-src=foods.imgUrl-->
+<!--                :img-alt="''"-->
+<!--                :name=foods.foodName-->
+<!--                :views=foods.views-->
+<!--                :likes="foods.likes">-->
+<!--            </food-card>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <button class="carousel-control-prev" type="button" data-bs-target="#foodCarousel" data-bs-slide="prev">-->
+<!--      <i class="bi bi-chevron-left text-black"></i>-->
+<!--    </button>-->
+<!--    <button class="carousel-control-next" type="button" data-bs-target="#foodCarousel" data-bs-slide="next">-->
+<!--      <i class="bi bi-chevron-right text-black"></i>-->
+<!--    </button>-->
+<!--  </div>-->
 </template>
 
 <script>
