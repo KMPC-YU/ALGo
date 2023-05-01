@@ -18,15 +18,15 @@
               <div class="form-group last mb-4" :class="pwEmpty">
                 <label for="password">비밀번호</label>
                 <input type="password" class="form-control" id="password" v-model="password">
-                
+
               </div>
-              
+
               <div class="d-flex mb-5 align-items-center">
                 <label class="control control--checkbox mb-0"><span class="caption">로그인 상태 유지</span>
                   <input type="checkbox" checked="checked"/>
                   <div class="control__indicator"></div>
                 </label>
-                <span class="ms-auto"><a href="#" class="forgot-pass">비밀번호 찾기</a></span>
+                <span class="ms-auto"><a href="/findpw" class="forgot-pass">비밀번호 찾기</a></span>
               </div>
 
               <div class="d-grid">
@@ -34,7 +34,7 @@
               </div>
 
               <span class="d-block text-center my-4 text-secondary">&mdash; or login with &mdash;</span>
-              
+
               <div class="social-login text-center">
                 <a href="#">
                   <img src="src/assets/kakaoLogo.png" alt=""/>
@@ -49,9 +49,9 @@
             </form>
             </div>
           </div>
-          
+
         </div>
-        
+
       </div>
     </div>
   </div>
