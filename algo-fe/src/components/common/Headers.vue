@@ -23,7 +23,10 @@
         </ul>
 
 <!--        Todo: 로그인 전-->
-        <div>
+        <div v-if="isLoggedIn === 'true'">
+          <button @click="logout" class="btn btn-primary me-2">로그아웃</button>
+        </div>
+        <div v-else>
           <router-link to="/login" class="btn btn-primary me-2">로그인</router-link>
           <router-link to="/signup" class="btn btn-primary">회원가입</router-link>
         </div>
@@ -46,8 +49,24 @@
 </template>
 
 <script>
-export default {
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
+export default {
+  setup() {
+    const store = useStore()
+    const isLoggedIn = computed(() => {
+      return store.getters.isLoggedIn
+    })
+
+    const logout = () => {
+      store.dispatch('logout')
+    }
+
+    return {
+      isLoggedIn, logout,
+    }
+  }
 }
 </script>
 
