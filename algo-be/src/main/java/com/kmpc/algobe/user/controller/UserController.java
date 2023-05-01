@@ -114,11 +114,11 @@ public class UserController {
     }
 
     @PatchMapping("/users/{user_id}/allergies")
-    public ResponseEntity<String> updateUserAllergy(@RequestBody List<AllergyType> allergyTypeList, @PathVariable("user_id") Long userId, @CurrentUser User user){
+    public ResponseEntity<String> changeUserAllergy(@RequestBody List<AllergyType> allergyTypeList, @PathVariable("user_id") Long userId, @CurrentUser User user){
         if(!Objects.equals(userId, user.getUserId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인 정보만 변경할 수 있습니다.");
 
-        Long result = userService.updateUserAllergy(allergyTypeList, user);
+        Long result = userService.changeUserAllergy(allergyTypeList, user);
         if(Objects.equals(result, userId))
             return ResponseEntity.status(HttpStatus.OK).body("사용자 알레르기 정보 변경을 완료하였습니다.");
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 알레르기 정보 변경에 실패하였습니다.");
@@ -126,25 +126,25 @@ public class UserController {
 
     //TODO 이미지 url 보안 생각해볼것, S3 Presigned URL 사용 시 수정 필요
     @PatchMapping("/users/{user_id}/profile-image")
-    public ResponseEntity<String> updateProfileImage(@RequestBody String imageUrl, @PathVariable("user_id") Long userId, @CurrentUser User user){
+    public ResponseEntity<String> changeProfileImage(@RequestBody String imageUrl, @PathVariable("user_id") Long userId, @CurrentUser User user){
         if(!Objects.equals(userId, user.getUserId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인 정보만 변경할 수 있습니다.");  //TODO 예외처리 추후 구현
 
-        Long result = userService.updateProfileImage(imageUrl, user);
+        Long result = userService.changeProfileImage(imageUrl, user);
         if(Objects.equals(result, userId))
             return ResponseEntity.status(HttpStatus.OK).body("프로필 사진 변경을 완료하였습니다.");
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 사진 변경에 실패하였습니다.");
     }
 
     @PatchMapping("/users/{user_id}/nicknames")
-    public ResponseEntity<String> updateNickname(@RequestBody @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\\d]{2,15}$", message = "닉네임은 한글, 영어, 숫자를 사용할 수 있으며 2자 이상 15자 이내로 입력해주세요.") String nickname,
+    public ResponseEntity<String> changeNickname(@RequestBody @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z\\d]{2,15}$", message = "닉네임은 한글, 영어, 숫자를 사용할 수 있으며 2자 이상 15자 이내로 입력해주세요.") String nickname,
                                                  @PathVariable("user_id") Long userId, @CurrentUser User user){
         if(!Objects.equals(userId, user.getUserId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인 정보만 변경할 수 있습니다.");  //TODO 예외처리 추후 구현
 
         if(userService.existsByNickname(nickname))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 닉네임입니다.");
-        Long result = userService.updateNickname(nickname, user);
+        Long result = userService.changeNickname(nickname, user);
 
         if(Objects.equals(result, userId))
             return ResponseEntity.status(HttpStatus.OK).body("닉네임 변경을 완료하였습니다.");
@@ -152,11 +152,11 @@ public class UserController {
     }
 
     @PatchMapping("/users/{user_id}/passwords")
-    public ResponseEntity<String> updatePassword(@RequestBody @Valid PasswordChangeDto passwordChangeDto, @PathVariable("user_id") Long userId, @CurrentUser User user){
+    public ResponseEntity<String> changePassword(@RequestBody @Valid PasswordChangeDto passwordChangeDto, @PathVariable("user_id") Long userId, @CurrentUser User user){
         if(!Objects.equals(userId, user.getUserId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인 정보만 변경할 수 있습니다.");
 
-        Long result = userService.updatePassword(passwordChangeDto, user);
+        Long result = userService.changePassword(passwordChangeDto, user);
 
         if(Objects.equals(result, userId))
             return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경을 완료하였습니다.");

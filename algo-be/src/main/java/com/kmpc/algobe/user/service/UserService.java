@@ -81,7 +81,7 @@ public class UserService {
     }
 
     @Transactional
-    public Long updateUserAllergy(List<AllergyType> allergyTypeList, User user) {
+    public Long changeUserAllergy(List<AllergyType> allergyTypeList, User user) {
         Integer allergyInfo = allergyTypeList.stream()
                 .mapToInt(AllergyType::getAllergyBit)
                 .sum();
@@ -90,17 +90,17 @@ public class UserService {
     }
 
     @Transactional
-    public Long updateProfileImage(String imageUrl, User user) {
+    public Long changeProfileImage(String imageUrl, User user) {
         return userRepository.save(user.updateProfileImage(imageUrl)).getUserId();
     }
 
     @Transactional
-    public Long updateNickname(String nickname, User user) {
+    public Long changeNickname(String nickname, User user) {
         return userRepository.save(user.updateNickname(nickname)).getUserId();
     }
 
     @Transactional
-    public Long updatePassword(PasswordChangeDto passwordChangeDto, User user) {
+    public Long changePassword(PasswordChangeDto passwordChangeDto, User user) {
         if (!passwordChangeDto.getNewPassword().equals(passwordChangeDto.getNewPasswordConfirm())) {
             throw new RuntimeException("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
         }
