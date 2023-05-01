@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-center mt-2">ALGO</h1>
+    <h1 class="text-center mt-2">ALGo</h1>
     <div class="card mt-4 mx-auto shadow" style="max-width: 680px;">
       <div class="card-body">
         <div class="progress" style="max-width: 100px; height: 10px">
