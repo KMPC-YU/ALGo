@@ -30,20 +30,20 @@
               </div>
 
               <div class="d-grid">
-                <input type="button" value="Log In" class="btn btn-primary" @click="login()">
+                <input type="button" value="Log In" class="btn btn-primary" @click="login">
               </div>
 
               <span class="d-block text-center my-4 text-secondary">&mdash; or login with &mdash;</span>
               
               <div class="social-login text-center">
                 <a href="#">
-                  <img src="src/assets/kakaoLogo.png" alt=""/>
+                  <img src="/src/assets/kakaoLogo.png" alt=""/>
                 </a>
                 <a href="#">
-                  <img src="src/assets/naverLogo.png" alt=""/>
+                  <img src="/src/assets/naverLogo.png" alt=""/>
                 </a>
                 <a href="#">
-                  <img src="src/assets/googleLogo.png" alt=""/>
+                  <img src="/src/assets/googleLogo.png" alt=""/>
                 </a>
               </div>
             </form>
@@ -60,6 +60,7 @@
 <script>
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
+import Swal from "sweetalert2";
 
 export default {
   setup() {
@@ -75,12 +76,19 @@ export default {
     })
 
     const store = useStore()
-    const login = () => {
-      store.dispatch('login', {
+    const login = async () => {
+      await store.dispatch('login', {
         username: username.value,
         password: password.value
+      }).then((res) => {
+
       }).catch((err) => {
-        console.error(err)
+        Swal.fire({
+          title: err.data,
+          icon: 'error',
+          showConfirmButton: false,
+          timer: 1500,
+        })
       })
     }
 
