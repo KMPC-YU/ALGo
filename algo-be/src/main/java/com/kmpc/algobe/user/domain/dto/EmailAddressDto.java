@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class EmailAddressDto {
     @Email
     private String email;
+
+    private String username;
 }
