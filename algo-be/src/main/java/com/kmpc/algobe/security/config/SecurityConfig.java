@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/v1/boards").access(userAuth) // 시큐리티가 인증한 사용자
-                .requestMatchers("/api/v1/signUp", "/api/v1/login", "/api/v1/emails", "/api/v1/validate", "/api/v1/verify-email", "/api/v1/verify-username", "/api/v1/verify-nickname").permitAll()
+                .requestMatchers("/api/v1/signUp", "/api/v1/login", "/api/v1/emails", "/api/v1/validate", "/api/v1/verify-email", "/api/v1/verify-username", "/api/v1/verify-nickname", "/api/v1/find-password").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
@@ -98,7 +98,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(Config.WEB_BASE_URL, "http://61.254.61.9:3000"));
+        configuration.setAllowedOrigins(Arrays.asList(Config.WEB_BASE_URL, "http://61.254.61.9:3000", "http://116.124.137.222:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTION"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setExposedHeaders(Arrays.asList("X-Page-Count", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
