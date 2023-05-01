@@ -6,6 +6,7 @@ import com.kmpc.algobe.security.provider.JwtProvider;
 import com.kmpc.algobe.user.domain.dto.LoginRequestDto;
 import com.kmpc.algobe.security.dto.LoginResponseDto;
 import com.kmpc.algobe.user.domain.dto.PasswordChangeDto;
+import com.kmpc.algobe.user.domain.dto.PasswordFindDto;
 import com.kmpc.algobe.user.domain.dto.SignUpRequestDto;
 import com.kmpc.algobe.user.domain.entity.User;
 import com.kmpc.algobe.user.repository.UserRepository;
@@ -29,7 +30,7 @@ public class UserService {
 
     @Transactional
     public Boolean signUp(SignUpRequestDto signUpRequestDto) {
-        if (!redisUtil.getData(signUpRequestDto.getEmail()).equals(signUpRequestDto.getCode()))
+        if (!redisUtil.getData(signUpRequestDto.getEmail() + "_validate").equals("True"))
             throw new RuntimeException("인증번호가 일치하지 않습니다.");
 
         if (!signUpRequestDto.getPassword().equals(signUpRequestDto.getPasswordConfirm())) {
@@ -57,7 +58,7 @@ public class UserService {
     @Transactional
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(() -> new RuntimeException("존재하지 않는 아이디입니다."));
-        if(!encoder.matches(loginRequestDto.getPassword(), user.getPassword())){
+        if (!encoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             throw new RuntimeException("비밀번호가 틀렸습니다.");
         }
 
@@ -65,22 +66,22 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean existsByNickname(String nickname){
+    public Boolean existsByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
 
     @Transactional(readOnly = true)
-    public Boolean existsByUsername(String username){
+    public Boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
     @Transactional(readOnly = true)
-    public Boolean existsByEmail(String email){
+    public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
     @Transactional
-    public Long updateUserAllergy(List<AllergyType> allergyTypeList, User user){
+    public Long updateUserAllergy(List<AllergyType> allergyTypeList, User user) {
         Integer allergyInfo = allergyTypeList.stream()
                 .mapToInt(AllergyType::getAllergyBit)
                 .sum();
@@ -104,14 +105,32 @@ public class UserService {
             throw new RuntimeException("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
         }
 
-        if(!user.getPassword().equals(encoder.encode(passwordChangeDto.getCurrentPassword()))) {
+        if (!user.getPassword().equals(encoder.encode(passwordChangeDto.getCurrentPassword()))) {
             throw new RuntimeException("현재 비밀번호가 일치하지 않습니다.");
         }
 
-        if(user.getPassword().equals(encoder.encode(passwordChangeDto.getNewPassword()))){
+        if (user.getPassword().equals(encoder.encode(passwordChangeDto.getNewPassword()))) {
             throw new RuntimeException("이전 비밀번호와 같은 비밀번호를 사용할 수 없습니다.");
         }
 
         return userRepository.save(user.updatePassword(encoder.encode(passwordChangeDto.getNewPassword()))).getUserId();
+    }
+
+    @Transactional
+    public String findPassword(PasswordFindDto passwordFindDto) {
+        User user = userRepository.findByEmail(passwordFindDto.getEmail()).orElseThrow();
+
+        if (!redisUtil.getData(passwordFindDto.getEmail() + "_validate").equals("True"))
+            throw new RuntimeException("인증번호가 일치하지 않습니다.");
+
+        if (!passwordFindDto.getNewPassword().equals(passwordFindDto.getNewPasswordConfirm())) {
+            throw new RuntimeException("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
+        }
+
+        if (user.getPassword().equals(encoder.encode(passwordFindDto.getNewPassword()))) {
+            throw new RuntimeException("이전 비밀번호와 같은 비밀번호를 사용할 수 없습니다.");
+        }
+
+        return userRepository.save(user.updatePassword(encoder.encode(passwordFindDto.getNewPassword()))).getEmail();
     }
 }

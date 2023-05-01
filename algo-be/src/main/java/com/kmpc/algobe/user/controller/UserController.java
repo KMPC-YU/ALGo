@@ -57,7 +57,7 @@ public class UserController {
 
     @PostMapping("/emails")
     public ResponseEntity<String> sendEmail(@RequestBody @Valid EmailAddressDto emailAddressDto){
-        emailService.sendEmail(emailAddressDto.getEmail());
+        emailService.sendEmail(emailAddressDto.getEmail(), emailAddressDto.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body("이메일을 발송했습니다.");
     }
 
@@ -71,6 +71,15 @@ public class UserController {
         if (verifyCode == ResultVerifyCode.TIME_OUT)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증 유효시간이 초과하였습니다.");
         else return ResponseEntity.status(HttpStatus.OK).body("이메일 인증에 성공하였습니다.");
+    }
+
+    @PostMapping("/find-password")
+    public ResponseEntity<String> findPassword(@RequestBody @Valid PasswordFindDto passwordFindDto){
+        String result = userService.findPassword(passwordFindDto);
+
+        if(Objects.equals(result, passwordFindDto.getEmail()))
+            return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경을 완료하였습니다.");
+        else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 변경에 실패하였습니다.");
     }
 
     @GetMapping("/verify-nickname")
