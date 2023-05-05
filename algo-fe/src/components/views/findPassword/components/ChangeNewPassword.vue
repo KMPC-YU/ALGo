@@ -4,11 +4,11 @@
     <div class="card mt-4 mx-auto shadow" style="max-width: 680px;">
       <div class="card-body">
         <div class="progress" style="max-width: 100px; height: 10px">
-          <div class="progress-bar" style="width: 100% "></div>
+          <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100% "></div>
         </div>
         <h4 class="card-title mt-3">ALGo 로그인에 사용할<br/>새로운 비밀번호를 입력해주세요</h4>
         <h5 class="text-black-50 mt-5">이메일 아이디</h5>
-        <p class="fw-bold">{{ username }}</p>
+        <p class="fw-bold">{{ email }}</p>
         <h5 class="text-black-50 mt-4">새로운 비밀번호</h5>
         <div class="mb-2">
           <input type="password" class="form-control" placeholder="비밀번호 입력 (8자 이상)" v-model="password" @keyup.enter="checkPassword"
@@ -33,12 +33,12 @@ import router from '@/router/router'
 
 export default {
   props: {
-    username: {
+    email: {
       type: String,
       required: true
     }
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const { axiosPatch } = useAxios()
     const password = ref('')
     const passwordCheck = ref('')
@@ -82,13 +82,11 @@ export default {
         alert('비밀번호를 모두 작성해주세요.')
       } else if (equalPassword.value && passwordValidation.value) {
         if (password.value === passwordCheck.value) {
-          axiosPatch('/api/v1/users/password', {
-            username: props.username,
-            password: '',
-            new_password: password.value,
-            is_reset: true,
-          }, (res) => {
-            console.log(res)  // 여기
+          axiosPatch('/api/v1/find-password', { // 수정 필요
+            email: props.email,
+            new_password: '',
+            new_password_confirm: password.value,
+          }, () => {
             alert('비밀번호 변경이 완료되었습니다. 로그인화면으로 이동합니다.')
             router.push({name: 'Login'})
           }, (err) => {

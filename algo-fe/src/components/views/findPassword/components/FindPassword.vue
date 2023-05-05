@@ -1,29 +1,43 @@
 <template>
   <div class="container">
-    <h1 class="text-center mt-2">ALGO</h1>
-    <div class="card mt-4 mx-auto shadow" style="max-width: 680px;">
+    <div class="card d-flex justify-content-center align-items-center">
+      <div class="logo text-center">
+        <img src="/ALGo_Logo.ico" alt="" width="50">
+        <span class="fs-1 align-middle"> ALGo</span>
+      </div>
       <div class="card-body">
-        <div class="progress" style="max-width: 100px; height: 10px">
-          <div class="progress-bar" style="width: 50% "></div>
-        </div>
-        <h4 class="card-title mt-3">비밀번호 찾기를 위해<br/> 이메일 인증을 진행해주세요.</h4>
-        <div class="row mt-4">
-          <div class="col-9">
-            <input type="text" class="form-control" placeholder="이메일 입력"
-                   v-model="username" @blur="checkEmail" @keyup.enter="checkEmail(true)" maxlength="50" :disabled="sendMail" >
-            <p v-show="enableErrorMessage" style="color: red"> {{ errorMessage }} </p>
+        <div class="mb-5">
+          <h4 class="card-title mb-3">비밀번호 찾기</h4>
+          <div class="progress" style="max-width: 100px; height: 10px">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 50%"></div>
           </div>
-          <div class="col-auto">
-            <button class="btn btn-primary" @click="checkEmail(true)" :disabled="sendMail">인증번호 받기</button>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label fw-bold">아이디</label>
+          <input type="text" v-model="username" id="username" maxlength="20" :disabled="sendMail"
+                 class="form-control form-control-lg">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label fw-bold">이메일</label>
+          <div class="row">
+            <div class="col-lg-auto">
+              <input type="text" v-model="email" id="email" maxlength="40" :disabled="sendMail"
+                     @blur="checkEmail" @keyup.enter="checkEmail(true)"
+                     class="form-control form-control-lg">
+              <p v-show="enableErrorMessage" class="text-danger"> {{ errorMessage }} </p>
+            </div>
+            <div class="col-lg-auto mt-lg-0 mt-2">
+              <button class="btn btn-lg btn-primary" @click="checkEmail(true)" :disabled="sendMail">인증번호 받기</button>
+            </div>
           </div>
         </div>
         <div v-show="inputCodeEnable" class="row mt-2">
           <div class="col-9">
-            <input type="tel" v-model="authCode" class="form-control" placeholder="인증번호 입력" maxlength="6" @keyup.enter="checkAuthCode">
-            <p v-show="enableCodeErrorMessage" style="color: red"> {{ codeErrorMessage }} </p>
+            <input type="tel" v-model="authCode" class="form-control form-control-lg" placeholder="인증번호 입력" maxlength="6" @keyup.enter="checkAuthCode">
+            <p v-show="enableCodeErrorMessage" class="text-danger"> {{ codeErrorMessage }} </p>
           </div>
-          <div class="col-auto" style="color: red;">
-            <p style="text-align:center; vertical-align:middle; top: 20%">남은시간 : {{ leftTime }}초</p>
+          <div class="col-auto text-danger">
+            <p style="text-align:center; vertical-align:middle; top: 20%">남은시간: {{ leftTime }}초</p>
           </div>
           <div v-show="leftTime <= 290" class="mt-1">
             <a type="button" class="code-text" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -31,7 +45,7 @@
             </a>
           </div>
         </div>
-        <button class="btn btn-primary form-control mt-4" @click="checkAuthCode">다음</button>
+        <button class="btn btn-lg btn-primary form-control mt-4" @click="checkAuthCode">다음</button>
       </div>
     </div>
   </div>
@@ -54,16 +68,19 @@
       </div>
     </div>
   </div>
+  <!-- <button class="btn btn-warning" @click="test">test</button> -->
 </template>
 
 <script>
 import { ref } from 'vue'
 import useAxios from '@/modules/axios'
+import Swal from 'sweetalert2'
 
 export default {
-  emits: ['username'],
-  setup(props,{ emit }) {
+  emits: ['step2'],
+  setup(props, { emit }) {
     const { axiosGet, axiosPost } = useAxios()
+    const email = ref('')
     const username = ref('')
     const emailValidation = ref(false)  // 이메일 정규식 검사 결과
     const emailDuplicated = ref(false)  // 이메일 중복 여부
@@ -92,10 +109,10 @@ export default {
       emailDuplicatedCheck.value = false
 
       const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/
-      emailValidation.value = !(!validateEmail.test(username.value) || !username.value);
+      emailValidation.value = !(!validateEmail.test(email.value) || !email.value);
       if (!emailValidation.value) {
         enableErrorMessage.value = true
-        errorMessage.value = '잘못된 형식의 이메일입니다. 정확한 이메일을 입력해 주세요.'
+        errorMessage.value = '이메일 형식을 확인해주세요.'
       } else {
         duplicateCheck(sendMail)
       }
@@ -103,9 +120,9 @@ export default {
 
     const duplicateCheck = (sendMail) => { // 이메일(아이디) 중복 검사
       resetErrorMessage()
-      if (username.value && emailValidation.value) {
+      if (email.value && emailValidation.value) {
         emailDuplicatedCheck.value = true
-        axiosGet(`/api/v1/users/${username.value}/exists`, (res) => {
+        axiosGet(`/api/v1/verify-email?email=${email}`, (res) => {
           emailDuplicated.value = res.data
           if (emailDuplicated.value) {
             if (sendMail === true) {
@@ -131,9 +148,9 @@ export default {
         startTimer()
         sendMail.value = true
         inputCodeEnable.value = true
-        axiosPost('/api/v1/users/mail', {
+        axiosPost('/api/v1/emails', {
+          email: email.value,
           username: username.value,
-          is_signup: false,
         }, () => {
           enableCodeErrorMessage.value = true
           codeErrorMessage.value = '이메일로 발송된 6자리의 인증번호를 입력해 주세요.'
@@ -159,15 +176,14 @@ export default {
     const checkAuthCode = () => {
       if (emailValidation.value && emailDuplicated.value && emailDuplicatedCheck.value && inputCodeEnable.value && sendMail.value) {
         if (leftTime.value > 0) {
-          axiosPost('/api/v1/users/validate', {
-            username: username.value,
+          axiosPost('/api/v1/validate', {
+            email: email.value,
             code: authCode.value,
-            is_signup: false,
           }, () => {
             enableCodeErrorMessage.value = false
             codeErrorMessage.value = ''
             isComplete.value = true
-            emit('username', username.value)
+            emit('step2', email.value)
           }, () => {
             enableCodeErrorMessage.value = true
             codeErrorMessage.value = '인증번호가 일치하지 않습니다.'
@@ -179,7 +195,7 @@ export default {
     }
 
     const changeEmail = () => {
-      username.value = ''
+      email.value = ''
       emailValidation.value = false
       emailDuplicated.value = false
       emailDuplicatedCheck.value = false
@@ -191,7 +207,20 @@ export default {
       resetErrorMessage()
     }
 
+    const test = () => { // api test code
+      axiosPost('/api/v1/emails', {
+            email: 'test@naver.com',
+            username: 'testname',
+          }, (res) => {
+            console.log(res)
+          }, (err) => {
+            console.log('에러: ' + err)
+          })
+    }
+
     return {
+      test,
+      email,
       username,
       duplicateCheck,
       emailValidation,
@@ -215,6 +244,20 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  padding: 20px;
+}
+.card {
+  border: none;
+  background-color: #f1f1f2;
+  margin: 0 auto;
+}
+.card-body {
+  max-width: 510px;
+}
+.logo {
+  padding: 20px 0;
+}
 .code-text {
   text-decoration: none;
   color:black;
