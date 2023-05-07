@@ -1,9 +1,6 @@
 import { createStore } from 'vuex';
-import useAxios from '@/modules/axios.js'
 import createPersistedState from "vuex-persistedstate";
-import router from "@/router/router.js";
-
-const { axiosPost } = useAxios();
+import * as AuthAPI from '@/services/auth.js'
 
 export default createStore({
     state: {
@@ -18,31 +15,29 @@ export default createStore({
         },
     },
     actions: {
-        login({ commit }, credentials) {
+        login({ commit }, loginData) {
             return new Promise((resolve, reject) => {
-                axiosPost('/api/v1/login', credentials,
-                    (res) => {
-                    commit('setLoginStatus', 'true')
-                    router.push('/')
-                    resolve(res)
-                }, (err) => {
-                    console.error(err)
-                    reject(err)
+                AuthAPI.login(loginData)
+                    .then((res) => {
+                        commit('setLoginStatus', 'true')
+                        resolve(res)
+                    })
+                    .catch((err) => {
+                        reject(err)
                 })
             });
         },
         logout({ commit }) {
             return new Promise((resolve, reject) => {
-                axiosPost('/api/v1/logout',{},
-                    (res) => {
-                    commit('setLoginStatus', 'false')
+                AuthAPI.logout()
+                    .then((res) => {
+                        commit('setLoginStatus', 'false')
                         location.reload()
-                    resolve(res)
-                }, (err) => {
-                    console.error(err)
-                    commit('setLoginStatus', 'false')
-                    reject(err)
-                })
+                        resolve(res)
+                    })
+                    .catch((err) => {
+                        reject(err)
+                    })
             });
         },
     },
