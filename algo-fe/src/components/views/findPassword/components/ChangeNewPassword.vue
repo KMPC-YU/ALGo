@@ -28,7 +28,7 @@
 
 <script>
 import { ref, watch } from 'vue'
-import useAxios from '@/modules/axios'
+// import useAxios from '@/modules/axios'
 import router from '@/router/router'
 
 export default {

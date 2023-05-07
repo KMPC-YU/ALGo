@@ -41,7 +41,7 @@
 
 <script>
 import FoodCard from "@compo/common/FoodCard.vue";
-import useAxios from '@/modules/axios'
+// import useAxios from '@/modules/axios'
 import { onMounted, ref } from "vue";
 
 export default {
@@ -49,7 +49,7 @@ export default {
     FoodCard,
   },
   setup() {
-    const { axiosGet } = useAxios()
+    // const { axiosGet } = useAxios()
 
     onMounted(() => {
       getFoods()
