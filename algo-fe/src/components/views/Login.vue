@@ -61,6 +61,7 @@
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import Swal from "sweetalert2";
+import router from "@/router/router.js";
 
 export default {
   setup() {
@@ -80,11 +81,11 @@ export default {
       await store.dispatch('login', {
         username: username.value,
         password: password.value
-      }).then((res) => {
-
+      }).then(() => {
+          router.push({name : 'Main'})
       }).catch((err) => {
         Swal.fire({
-          title: err.data,
+          title: "아이디 또는 비밀번호를 \n 확인해주세요.",
           icon: 'error',
           showConfirmButton: false,
           timer: 1500,
