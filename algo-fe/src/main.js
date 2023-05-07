@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router/router.js'
 import store from './store'
 import './style.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 // bootstrap
 import 'bootstrap/dist/css/bootstrap.css'
