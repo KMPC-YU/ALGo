@@ -3,12 +3,12 @@
     <div class="card d-flex justify-content-center align-items-center">
       <div class="logo text-center">
         <img src="/ALGo_Logo.ico" alt="" width="50">
-        <span class="fs-1 align-middle"> ALGO</span>
+        <span class="fs-1 align-middle"> ALGo</span>
       </div>
       <div class="form-check mb-4 mt-4">
         <input class="form-check-input" type="checkbox" v-model="checkBoxAllChecked" @click="toggleCheckBoxAll" value="" id="checkBoxAll">
         <label class="form-check-label fw-bold text-decoration-underline" for="checkBoxAll">
-          ALGO 이용약관, 개인정보 수집 및 이용에 모두 동의합니다.
+          ALGo 이용약관, 개인정보 수집 및 이용에 모두 동의합니다.
         </label>
       </div>
       <div class="card-body">

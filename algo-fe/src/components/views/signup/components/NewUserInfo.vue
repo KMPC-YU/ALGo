@@ -3,7 +3,7 @@
         <div class="card d-flex justify-content-center align-items-center">
             <div class="logo text-center">
                 <img src="/ALGo_Logo.ico" alt="" width="50">
-                <span class="fs-1 align-middle"> ALGO</span>
+                <span class="fs-1 align-middle"> ALGo</span>
             </div>
             <div class="card-body">
                 <div>
