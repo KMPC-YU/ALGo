@@ -1,6 +1,6 @@
 <template>
   <FindPassword v-if="step === 1" @step2="showStep2"/>
-  <ChangeNewPassword v-else :email="email"/>
+  <ChangeNewPassword v-else :userData="userData"/>
 </template>
 
 <script>
@@ -15,16 +15,16 @@ export default {
   },
   setup() {
     const step = ref(1)
-    const email = ref('')
+    const userData = ref({})
 
     const showStep2 = (data) => {
-      email.value = data
+      userData.value = data
       step.value = 2
     }
 
     return {
       step,
-      email,
+      userData,
       showStep2,
     }
   }
