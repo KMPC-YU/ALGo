@@ -28,7 +28,7 @@
                  :class="{'': password2Valid === 1, 'is-valid': password2Valid === 2, 'is-invalid': password2Valid === 3}">
           <div class="invalid-feedback"> {{ password2Message }} </div>
         </div>
-        <button class="btn btn-lg btn-primary form-control mt-4" @click="checkPassword">완료</button>
+        <button class="btn btn-lg btn-primary form-control mt-4" @click="changePassword">완료</button>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
 
 <script>
 import { ref } from 'vue'
-import useAxios from '@/modules/axios'
+import * as FindpwAPI from '@/services/findpw.js'
 import router from '@/router/router'
 
 export default {
@@ -47,7 +47,6 @@ export default {
     }
   },
   setup(props) {
-    const { axiosPatch } = useAxios()
     const password = ref('')
     const passwordValid = ref(1)
     const passwordMessage = ref('')
@@ -80,21 +79,19 @@ export default {
       }
     }
 
-    const checkPassword = () => {
+    const changePassword = () => {
       passwordValidCheck()
       password2ValidCheck()
 
       if (passwordValid.value === 2 && password2Valid.value === 2) {
-        axiosPatch(`/api/v1/users/${props.userData.username}/passwords`, {  // 수정 필요
-          email: props.userData.email,
-          new_password: password.value,
-          new_password_confirm: password2.value,
-        }, () => {
+        FindpwAPI.changePassword(props.userData.username, props.userData.email, password.value, password2.value)
+          .then(() => {
           alert('비밀번호 변경이 완료되었습니다. 로그인화면으로 이동합니다.')
           router.push({name: 'Login'})
-        }, (err) => {
-          console.log(err.response.data.message)
-        })
+          })
+          .catch((err) => {
+            console.log(err.response.data.message)
+          })
       }
     }
 
@@ -107,7 +104,7 @@ export default {
       password2Message,
       passwordValidCheck,
       password2ValidCheck,
-      checkPassword,
+      changePassword,
     }
   }
 }

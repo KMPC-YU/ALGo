@@ -29,7 +29,7 @@
               <div class="invalid-feedback"> {{ emailMessage }} </div>
             </div>
             <div class="col-lg-4 ms-auto mt-lg-0 mt-2">
-              <button class="btn btn-lg btn-primary" @click="verifyMail" :disabled="sendMail">인증번호 받기</button>
+              <button class="btn btn-lg btn-primary" @click="sendVerifyEmailCode" :disabled="sendMail">인증번호 받기</button>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@
           계속해서 인증 이메일이 오지 않으면, 다시 인증번호를 요청해 주세요.<br>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="verifyMail(true)" data-bs-dismiss="modal">인증메일 재발송</button>
+          <button type="button" class="btn btn-primary" @click="sendVerifyEmailCode(true)" data-bs-dismiss="modal">인증메일 재발송</button>
           <button type="button" class="btn btn-secondary" @click="changeEmail" data-bs-dismiss="modal">다른 이메일로 인증</button>
         </div>
       </div>
@@ -76,13 +76,12 @@
 
 <script>
 import { ref } from 'vue'
-import useAxios from '@/modules/axios'
+import * as FindpwAPI from '@/services/findpw.js'
 // import Swal from 'sweetalert2'
 
 export default {
   emits: ['step2'],
   setup(props, { emit }) {
-    const { axiosGet, axiosPost } = useAxios()
     const isComplete = ref(false)
 
     const username = ref('')
@@ -108,21 +107,15 @@ export default {
         usernameValid.value = 3
         usernameMessage.value = '5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.'
       } else {
-        usernameDuplicateCheck()
+        FindpwAPI.usernameDuplicateCheck(username.value)
+          .then(() => {
+            usernameValid.value = 3
+            usernameMessage.value = '해당 아이디로 가입된 정보가 없습니다.'
+            })
+          .catch(() => {
+            usernameValid.value = 2
+          })
       }
-    }
-
-    const usernameDuplicateCheck = () => {
-      axiosGet(`/api/v1/verify-username?username=${username.value}`, (res) => {
-        if (res.data) {
-          usernameValid.value = 2
-        } else {
-          usernameValid.value = 3
-          usernameMessage.value = '해당 아이디로 가입된 정보가 없습니다.'
-        }
-      }, (err) => {
-        console.log('아이디 중복' + err)
-      })
     }
 
     const emailValidCheck = () => {
@@ -133,25 +126,21 @@ export default {
         emailValid.value = 3
         emailMessage.value = '이메일 형식을 확인해주세요.'
       } else {
-        emailDuplicateCheck()  // 이메일 중복 검사
+        FindpwAPI.emailDuplicateCheck(email.value)
+          .then(() => {
+            emailValid.value = 3
+            emailMessage.value = '해당 이메일로 가입된 정보가 없습니다.'
+          })
+          .catch(() => {
+            emailValid.value = 2
+          })
       }
     }
 
-    const emailDuplicateCheck = () => { // 이메일 중복 검사
-      axiosGet(`/api/v1/verify-email?email=${email.value}`, (res) => {
-        // api return값 의미 알아야 함
-        if (res.data) {
-          emailValid.value = 2
-        } else {
-          emailValid.value = 3
-          emailMessage.value = '해당 이메일로 가입된 정보가 없습니다.'
-        }
-      }, (err) => console.log('email 중복' + err))
-    }
-
-    const verifyMail = (resend = false) => {
+    const sendVerifyEmailCode = (resend = false) => {
       usernameValidCheck()
       emailValidCheck()
+
       if (usernameValid.value === 2&& emailValid.value === 2) {
         if (resend === false) {
           alert('해당 이메일로 인증메일을 발송했습니다.')
@@ -160,19 +149,20 @@ export default {
           leftTime.value = 300
           alert('인증메일을 재발송했습니다.')
         }
+
         startTimer()
         sendMail.value = true
         inputCodeEnable.value = true
-        axiosPost('/api/v1/emails', {
-          email: email.value,
-          username: username.value,
-        }, () => {
-          authCodeMessage.value = '이메일로 발송된 6자리의 인증번호를 입력해 주세요.'
-        }, (err) => {
-          alert('인증메일 발송에 실패했습니다.')
-          sendMail.value = false
-          console.error(err)
-        })
+
+        FindpwAPI.sendVerifyEmailCode(email.value, username.value)
+          .then(() => {
+            authCodeMessage.value = '이메일로 발송된 6자리의 인증번호를 입력해 주세요.'
+          })
+          .catch((err) => {
+            alert('인증메일 발송에 실패했습니다.')
+            sendMail.value = false
+            console.error(err)
+          })
       }
     }
 
@@ -190,20 +180,20 @@ export default {
     const checkAuthCode = () => {
       if (usernameValid.value === 2&& emailValid.value === 2 && inputCodeEnable.value && sendMail.value) {
         if (leftTime.value > 0) {
-          axiosPost('/api/v1/validate', {
-            email: email.value,
-            code: authCode.value,
-          }, () => {
-            authCodeValid.value = 2
-            isComplete.value = true
-            emit('step2', {
-              username: username.value,
-              email: email.value,
+
+          FindpwAPI.verifyEmailCode(email.value, authCode.value)
+            .then(() => {
+              authCodeValid.value = 2
+              isComplete.value = true
+              emit('step2', {
+                username: username.value,
+                email: email.value,
+              })
             })
-          }, () => {
-            authCodeValid.value = 3
-            authCodeMessage.value = '인증번호가 일치하지 않습니다.'
-          })
+            .catch(() => {
+              authCodeValid.value = 3
+              authCodeMessage.value = '인증번호가 일치하지 않습니다.'
+            })
         } else {
           alert('인증시간이 만료되었습니다. 다시 인증해주세요.')
         }
@@ -212,8 +202,6 @@ export default {
 
     const changeEmail = () => {
       email.value = ''
-      // emailDuplicated.value = false
-      // emailDuplicateFlag.value = false
       sendMail.value = false
       inputCodeEnable.value = false
       authCode.value = ''
@@ -237,7 +225,7 @@ export default {
       leftTime,
       sendMail,
       inputCodeEnable,
-      verifyMail,
+      sendVerifyEmailCode,
       changeEmail,
     }
   }
