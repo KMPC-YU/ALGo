@@ -38,6 +38,7 @@
 import { ref } from 'vue'
 import * as FindpwAPI from '@/services/findpw.js'
 import router from '@/router/router'
+import Swal from 'sweetalert2'
 
 export default {
   props: {
@@ -86,11 +87,17 @@ export default {
       if (passwordValid.value === 2 && password2Valid.value === 2) {
         FindpwAPI.changePassword(props.userData.username, props.userData.email, password.value, password2.value)
           .then(() => {
-          alert('비밀번호 변경이 완료되었습니다. 로그인화면으로 이동합니다.')
-          router.push({name: 'Login'})
+            Swal.fire({
+              title: '비밀번호 변경 완료',
+              text: '비밀번호가 변경되었습니다.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500,
+            })
+            router.push({name: 'Login'})
           })
           .catch((err) => {
-            console.log(err.response.data.message)
+            console.log(err)
           })
       }
     }

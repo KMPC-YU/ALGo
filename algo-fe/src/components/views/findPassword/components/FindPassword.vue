@@ -77,7 +77,7 @@
 <script>
 import { ref } from 'vue'
 import * as FindpwAPI from '@/services/findpw.js'
-// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
 
 export default {
   emits: ['step2'],
@@ -143,11 +143,11 @@ export default {
 
       if (usernameValid.value === 2&& emailValid.value === 2) {
         if (resend === false) {
-          alert('해당 이메일로 인증메일을 발송했습니다.')
+          Swal.fire({icon: 'success', title: '인증코드 발송 완료!', showConfirmButton: false, timer: 1500})
         } else {
           clearTimeout(Timer)
           leftTime.value = 300
-          alert('인증메일을 재발송했습니다.')
+          Swal.fire({icon: "success", title: '재발송 완료!', showConfirmButton: false, timer: 1500})
         }
 
         startTimer()
@@ -159,7 +159,7 @@ export default {
             authCodeMessage.value = '이메일로 발송된 6자리의 인증번호를 입력해 주세요.'
           })
           .catch((err) => {
-            alert('인증메일 발송에 실패했습니다.')
+            Swal.fire({icon: 'error', title: '인증코드 발송 실패...', showConfirmButton: false, timer: 1500})
             sendMail.value = false
             console.error(err)
           })
@@ -195,7 +195,7 @@ export default {
               authCodeMessage.value = '인증번호가 일치하지 않습니다.'
             })
         } else {
-          alert('인증시간이 만료되었습니다. 다시 인증해주세요.')
+          Swal.fire({icon: 'error', title: '인증시간 만료', text: '다시 인증해주세요.', showConfirmButton: false, timer: 1500})
         }
       }
     }
