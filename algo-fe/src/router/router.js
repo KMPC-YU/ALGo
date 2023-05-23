@@ -11,6 +11,9 @@ const router = createRouter({
         { path : "/login", name : "Login", component : Login },
         { path : "/signup", name : "SignUp", component: () => import('@views/signup/SignUp.vue') },
         { path: "/findpw", name: "FindPassword", component: FindPassword/*, beforeEnter: isLogin()*/ },
+        { path : "/boards/:board_id", name: "PostList", component: () => import('@views/Post/PostList.vue') },
+        { path : "/boards/:board_id/posts/:post_id", name: "PostDetail", component: () => import('@views/Post/PostDetail.vue') },
+        { path : "/boards/:board_id/write", name: "PostWrite", component: () => import('@views/Post/PostWrite.vue') }
     ]
 });
 
