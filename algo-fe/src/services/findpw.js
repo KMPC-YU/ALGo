@@ -28,7 +28,7 @@ export function verifyEmailCode(email, code) {
 
 // 비밀번호 변경
 export function changePassword(username, email, pw, pw2) {
-    return instance.patch(`api/v1/users${username}/passwords`, {
+    return instance.patch(`api/v1/users/${username}/passwords`, {
         email: email,
         new_password: pw,
         new_password_confirm: pw2,
