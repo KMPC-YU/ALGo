@@ -1,7 +1,9 @@
 <template>
-  <Headers></Headers>
-  <div class="wrapper">
-    <router-view></router-view>
+  <div>
+    <Headers></Headers>
+    <div>
+      <router-view></router-view>
+    </div>
     <Footer></Footer>
   </div>
 </template>
@@ -17,9 +19,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.wrapper {
-  background-color: #f1f1f2;
-}
-</style>

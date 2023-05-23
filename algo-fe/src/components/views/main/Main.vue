@@ -1,27 +1,25 @@
 <template>
-  <div class="wrapper">
-    <div class="container">
-      <div>
-        <carousel></carousel>
-      </div>
-      <div class="mt-5">
-        <div class="card">
-          <div class="card-body">
-            <food-carousel></food-carousel>
-          </div>
-        </div>
-      </div>
-      <div class="mt-5">
-        <div class="card">
-          <div class="card-body">
-            <recipe-carousel></recipe-carousel>
-          </div>
-        </div>
-      </div>
-<!--      <div class="mt-5">-->
-<!--        <category></category>-->
-<!--      </div>-->
+  <div class="container">
+    <div>
+      <carousel></carousel>
     </div>
+    <div class="mt-5">
+      <div class="card">
+        <div class="card-body">
+          <food-carousel></food-carousel>
+        </div>
+      </div>
+    </div>
+    <div class="mt-5">
+      <div class="card">
+        <div class="card-body">
+          <recipe-carousel></recipe-carousel>
+        </div>
+      </div>
+    </div>
+<!--    <div class="mt-5">-->
+<!--      <category></category>-->
+<!--    </div>-->
   </div>
 </template>
 
