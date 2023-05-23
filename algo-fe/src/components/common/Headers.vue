@@ -7,22 +7,12 @@
             <a class="navbar-brand me-2" href="/">
                 <img src="/ALGo_Logo.ico" alt="ALGo Logo" width="40"/>
             </a>
-
-            <!-- Toggle button -->
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarButtonsExample"
-                aria-controls="navbarButtonsExample"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <i class="fas fa-bars"></i>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
             </button>
 
             <!-- Collapsible wrapper -->
-            <div class="collapse navbar-collapse" id="navbarButtonsExample">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -36,12 +26,12 @@
                             커뮤니티
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">공지사항</a></li>
-                            <li><a class="dropdown-item" href="#">자유게시판</a></li>
-                            <li><a class="dropdown-item" href="#">익명게시판</a></li>
-                            <li><a class="dropdown-item" href="#">지식IN</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">포인트</a></li>
+                            <li><router-link class="dropdown-item" to="/boards/1">공지사항</router-link></li>
+<!--                            <li><a class="dropdown-item" href="#">자유게시판</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">익명게시판</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">지식IN</a></li>-->
+<!--                            <li><hr class="dropdown-divider"></li>-->
+<!--                            <li><a class="dropdown-item" href="#">포인트</a></li>-->
                         </ul>
                     </li>
                 </ul>
