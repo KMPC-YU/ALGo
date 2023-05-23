@@ -37,13 +37,13 @@
 
               <div class="social-login text-center">
                 <a href="#">
-                  <img src="/src/assets/kakaoLogo.png" alt=""/>
+                  <img src="/src/assets/social_icon/kakaoLogo.png" alt=""/>
                 </a>
                 <a href="#">
-                  <img src="/src/assets/naverLogo.png" alt=""/>
+                  <img src="/src/assets/social_icon/naverLogo.png" alt=""/>
                 </a>
                 <a href="#">
-                  <img src="/src/assets/googleLogo.png" alt=""/>
+                  <img src="/src/assets/social_icon/googleLogo.png" alt=""/>
                 </a>
               </div>
             </form>
