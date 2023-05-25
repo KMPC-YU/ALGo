@@ -15,5 +15,5 @@ export default defineConfig({
       '@views': path.resolve(__dirname, './src/components/views'),
     },
   },
-  plugins: [vue()]
+  plugins: [vue()],
 })
