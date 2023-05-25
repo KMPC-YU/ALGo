@@ -17,7 +17,7 @@
     </div>
     <div class="text-end mt-3">
       <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-default">
+        <button type="button" class="btn btn-primary">
           <i class="fa-solid fa-pencil me-1"></i>
           글쓰기
         </button>
@@ -60,20 +60,20 @@ export default {
 </script>
 
 <style lang="scss">
-.btn-default {
-  color: #394263;
-  background-color: #ffffff;
-  border-color: #dbe1e8;
-  font-weight: bold;
-  letter-spacing: 0.05em;
-}
-.btn-default:hover,
-.btn-default:active,
-.btn-default:focus {
-  background: #fafafa;
-  //color: #ffffff;
-  border-color: #000000;
-}
+//.btn-default {
+//  color: #394263;
+//  background-color: #ffffff;
+//  border-color: #dbe1e8;
+//  font-weight: bold;
+//  letter-spacing: 0.05em;
+//}
+//.btn-default:hover,
+//.btn-default:active,
+//.btn-default:focus {
+//  background: #fafafa;
+//  //color: #ffffff;
+//  border-color: #000000;
+//}
 
 .editor {
   background-color: #FFF;
