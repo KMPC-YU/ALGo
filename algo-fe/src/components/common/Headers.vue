@@ -15,6 +15,9 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <router-link class="nav-link" :class="{ active : currentRoute === '/boards/1'}" to="/boards/1">공지사항</router-link>
+                  </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">식품정보</a>
                     </li>
@@ -23,17 +26,22 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            커뮤니티
+                            자유게시판
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><router-link class="dropdown-item" to="/boards/1">공지사항</router-link></li>
+<!--                        <ul class="dropdown-menu">-->
 <!--                            <li><a class="dropdown-item" href="#">자유게시판</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">익명게시판</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">지식IN</a></li>-->
-<!--                            <li><hr class="dropdown-divider"></li>-->
-<!--                            <li><a class="dropdown-item" href="#">포인트</a></li>-->
-                        </ul>
+<!--                        </ul>-->
                     </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      지식IN
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      익명게시판
+                    </a>
+                  </li>
                 </ul>
                 <!-- Left links -->
 
@@ -98,6 +106,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
 export default {
     setup() {
@@ -106,17 +115,27 @@ export default {
             return store.getters.isLoggedIn
         })
 
+        const route = useRoute()
+        const currentRoute = computed(() => {
+            return route.path
+        })
+
         const logout = () => {
             store.dispatch('logout')
         }
 
         return {
-            isLoggedIn, logout,
+            isLoggedIn, logout, currentRoute
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+.active {
+  font-weight: bold;
+}
+.nav-item:hover {
+  font-weight: bold;
+}
 </style>
