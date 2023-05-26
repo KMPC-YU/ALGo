@@ -13,7 +13,10 @@ const router = createRouter({
         { path: "/findpw", name: "FindPassword", component: FindPassword/*, beforeEnter: isLogin()*/ },
         { path : "/boards/:board_id", name: "PostList", component: () => import('@views/Post/PostList.vue') },
         { path : "/boards/:board_id/posts/:post_id", name: "PostDetail", component: () => import('@views/Post/PostDetail.vue') },
-        { path : "/boards/:board_id/write", name: "PostWrite", component: () => import('@views/Post/PostWrite.vue') }
+        { path : "/boards/:board_id/write", name: "PostWrite", component: () => import('@views/Post/PostWrite.vue') },
+        { path: '/foods', name: 'FoodList', component: () => import('@views/food/FoodList.vue') },
+        { path: '/foods/:food_id', name: 'FoodDetail', component: () => import('@views/food/FoodDetail.vue') },
+        { path: '/foods/write', name: 'FoodWrite', component: () => import('@views/food/FoodWrite.vue')/*, props: true*/ },
     ]
 });
 
