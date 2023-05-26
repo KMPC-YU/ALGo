@@ -5,7 +5,7 @@
   </div>
   <!-- loading -->
   <div v-else-if="loading === 0">
-    <Loading/>
+    <!-- <Loading/> -->
   </div>
   <!-- load success -->
   <div v-else class="row">
@@ -101,23 +101,23 @@
 <script>
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
-import useAxios from '@/modules/axios'
-import store from '@/store'
-import Loading from '@compo/common/Loading'
-import NotFound from '@compo/common/NotFound'
+import * as FoodAPI from '@/services/food.js'
+// import store from '@/store'
+// import Loading from '@compo/common/Loading'
+import NotFound from '@compo/common/ErrorPage'
 
 export default {
   components: {
-    Loading,
+    // Loading,
     NotFound,
   },
   setup() {
-    const { axiosGet, axiosPost, axiosDelete } = useAxios()
     const route = useRoute()
     const router = useRouter()
     const loading = ref(0)
-    const foodId = route.params.id
     const isAdmin = ref(false)
+    const foodId = route.params.id
+    const recFoodList = ref('')
     const foodData = ref({
       raw_materials: '',
       allergy: '',
@@ -132,48 +132,32 @@ export default {
 
     const checkPermission = () => {
       isAdmin.value = false
-      if (store.state.isLogin) {
-        if (store.state.isAdmin) {
-          axiosGet('/api/v1/admin', () => {
-            isAdmin.value = true
-          }, () => {
-            isAdmin.value = false
-          })
-        }
-      }
+      FoodAPI.isAdmin().then(() => isAdmin.value = true)
+      // if (store.state.isLogin) {
+      //   if (store.state.isAdmin) {
+      //     axiosGet('/api/v1/admin', () => {
+      //       isAdmin.value = true
+      //     }, () => {
+      //       isAdmin.value = false
+      //     })
+      //   }
+      // }
     }
 
-    const recFoodList = ref('')
-
-    const favorite = (is_like, id) => {
-      if (is_like) {
-        axiosDelete(`/api/v1/foods/${id}/likes`
-            , () => {
-              location.reload()
-            }, () => {
-              alert('오류가 발생했습니다.')
-            })
-      } else {
-        axiosPost(`/api/v1/foods/${id}/likes`
-            , {}
-            , () => {
-              alert('즐겨찾기에 추가되었습니다.')
-              location.reload()
-            }, () => {
-              alert("오류가 발생했습니다.")
-            })
-      }
+    const favorite = (isLike, foodId) => {
+      FoodAPI.favorite(isLike, foodId).then(() => location.reload())
     }
 
-    const foodDelete = (id) => {
+    const foodDelete = (foodId) => {
       if(confirm('정말 식품을 삭제하시겠습니까?')) {
-        axiosDelete(`/api/v1/foods/${id}`
-            , () => {
-              alert("식품이 삭제되었습니다.")
-              router.go(-1)
-            }, () => {
-              alert('식품을 삭제할 수 없습니다.')
-            })
+        FoodAPI.deleteFood(foodId)
+          .then(() => {
+            alert("식품이 삭제되었습니다.")
+            router.go(-1)
+          })
+          .catch(() => {
+            alert('식품을 삭제할 수 없습니다.')
+          })
       }
     }
 
@@ -182,20 +166,20 @@ export default {
     }
 
     onMounted(() => {
-      // get post data
-      axiosGet(`/api/v1/foods/${foodId}`
-          , (res) => {
-            foodData.value = res.data
-            loading.value = 1
-          }, (err) => {
-            loading.value = -1
-            console.error(err)
-          })
-      axiosGet('/api/v1/foods/recommendation', (res) =>{
-        recFoodList.value = res.data
-      }, (err) => {
-        console.error(err)
-      })
+      FoodAPI.getFood(foodId)
+        .then((res) => {
+          loading.value = 1
+          foodData.value = res.data
+        })
+        .catch((err) => {
+          loading.value = -1
+          console.error(err)
+        })
+
+      FoodAPI.getRecommendFood()
+        .then(res => recFoodList.value = res.data)
+        .catch(err => console.error(err))
+
       checkPermission()
     })
 

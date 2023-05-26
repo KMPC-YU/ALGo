@@ -87,13 +87,12 @@
 
 <script>
 import { ref, watch, onMounted } from 'vue'
-import router from "@/router";
-import useAxios from '@/modules/axios'
+import router from '@/router'
 import { useRoute } from 'vue-router'
+import * as FoodAPI from '@/services/food.js'
 
 export default {
   setup() {
-    const { axiosPost, axiosGet, axiosPatch } = useAxios()
     const allergyData = new Map()
     const route = useRoute()
     const editable = ref(route.query.editable)
@@ -149,7 +148,6 @@ export default {
     const foodKind = ref('')
     const foodNutirition = ref('')
     const foodRawMeterials = ref('')
-    const foodImage = ref('')
 
     watch(allergyCheckData.value, () => {
       checkSelected()
@@ -162,24 +160,25 @@ export default {
     }
 
     const getFoodData = () => {
-      axiosGet(`/api/v1/foods/${foodId}`, (res) => {
-        foodName.value = res.data.food_name
-        foodCode.value = res.data.code
-        foodKind.value = res.data.product_kind
-        foodNutirition.value = res.data.nutrition
-        foodRawMeterials.value = res.data.raw_materials
-      }, (err) => {
-        console.error(err)
-      })
-      axiosGet(`/api/v1/foods/${foodId}/allergies`, (res) => {
-        const allergyData = new Map(Object.entries(res.data))
-        for (let i = 0; i < allergyData.size; i++) {
-          allergyCheckData.value[i].selected = allergyData.get(allergyCheckData.value[i].name)
-        }
-        setParams()
-      }, (err) => {
-        console.error(err)
-      })
+      FoodAPI.getFood(foodId)
+        .then((res) => {
+          foodName.value = res.data.food_name
+          foodCode.value = res.data.code
+          foodKind.value = res.data.product_kind
+          foodNutirition.value = res.data.nutrition
+          foodRawMeterials.value = res.data.raw_materials
+        })
+        .catch(err => console.error(err))
+
+      FoodAPI.getFoodAllergies(foodId)
+        .then((res) => {
+          const allergyData = new Map(Object.entries(res.data))
+          for (let i = 0; i < allergyData.size; i++) {
+            allergyCheckData.value[i].selected = allergyData.get(allergyCheckData.value[i].name)
+          }
+          setParams()
+        })
+        .catch(err => console.error(err))
     }
 
     let params = new URLSearchParams()
@@ -192,7 +191,7 @@ export default {
 
     const onSave = () => {
       if (editable.value) {
-        axiosPatch(`/api/v1/foods/${foodId}`, {
+        FoodAPI.updateFood(foodId, {
           code: foodCode.value,
           nutrition : foodNutirition.value,
           allergy : Object.fromEntries(allergyData),
@@ -200,14 +199,16 @@ export default {
           raw_materials : foodRawMeterials.value,
           product_kind : foodKind.value,
           food_image_url : previewImage.value,
-        }, () => {
+        })
+        .then(() => {
           alert('식품 수정이 완료되었습니다!')
-          router.push({name: 'FoodList'})
-        }, (err) => {
+          router.push({ name: 'FoodList' })
+        })
+        .catch(() => {
           alert('작성한 내용을 다시 확인해주세요.\n식품 보고번호는 숫자만 가능합니다.')
         })
       } else {
-        axiosPost('/api/v1/foods', {
+        FoodAPI.createFood({
           code: foodCode.value,
           nutrition : foodNutirition.value,
           allergy : Object.fromEntries(allergyData),
@@ -215,17 +216,19 @@ export default {
           raw_materials : foodRawMeterials.value,
           product_kind : foodKind.value,
           food_image_url : previewImage.value,
-        }, () => {
+        })
+        .then(() => {
           alert('식품 추가가 완료되었습니다!')
           router.push({name: 'FoodList'})
-        }, (err) => {
+        })
+        .catch(() => {
           alert('작성한 내용을 다시 확인해주세요.\n식품 보고번호는 숫자만 가능합니다.')
         })
       }
     }
 
     const moveToFoodList = () => {
-      router.push(`/foods`)
+      router.push('/foods')
     }
 
     onMounted(() => {
