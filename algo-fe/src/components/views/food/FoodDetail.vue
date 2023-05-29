@@ -102,6 +102,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import * as FoodAPI from '@/services/food.js'
+import Swal from 'sweetalert2'
 // import store from '@/store'
 // import Loading from '@compo/common/Loading'
 import NotFound from '@compo/common/ErrorPage'
@@ -149,16 +150,26 @@ export default {
     }
 
     const foodDelete = (foodId) => {
-      if(confirm('정말 식품을 삭제하시겠습니까?')) {
-        FoodAPI.deleteFood(foodId)
-          .then(() => {
-            alert("식품이 삭제되었습니다.")
-            router.go(-1)
-          })
-          .catch(() => {
-            alert('식품을 삭제할 수 없습니다.')
-          })
-      }
+      Swal.fire({
+        title: '식품 삭제',
+        text: '정말 식품을 삭제하시겠습니까?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소'
+      }).then((res) => {
+        if (res.isConfirmed) {
+          FoodAPI.deleteFood(foodId)
+            .then(() => {
+              Swal.fire({ title: '삭제 완료!', text: '식품이 삭제되었습니다.', icon: 'success', timer: 1500 })
+              router.go(-1)
+            })
+            .catch(() => {
+              Swal.fire({ title: '삭제 실패...', icon: 'error', text: '식품을 삭제할 수 없습니다.', showConfirmButton: false, timer: 1500 })
+            })
+        }
+      })
     }
 
     const moveToFoodListPage = () => {

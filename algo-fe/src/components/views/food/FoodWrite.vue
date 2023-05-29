@@ -90,6 +90,7 @@ import { ref, watch, onMounted } from 'vue'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import * as FoodAPI from '@/services/food.js'
+import Swal from 'sweetalert2'
 
 export default {
   setup() {
@@ -201,11 +202,11 @@ export default {
           food_image_url : previewImage.value,
         })
         .then(() => {
-          alert('식품 수정이 완료되었습니다!')
+          Swal.fire({ title: '수정 완료!', text: '식품 수정이 완료되었습니다.', icon: 'success', showConfirmButton: false, timer: 1500 })
           router.push({ name: 'FoodList' })
         })
         .catch(() => {
-          alert('작성한 내용을 다시 확인해주세요.\n식품 보고번호는 숫자만 가능합니다.')
+          Swal.fire({ title: '작성 내용을 다시 확인해주세요.', text: '식품 보고번호는 숫자만 가능합니다.', icon: 'error', showConfirmButton: false, timer: 1500 })
         })
       } else {
         FoodAPI.createFood({
@@ -218,11 +219,11 @@ export default {
           food_image_url : previewImage.value,
         })
         .then(() => {
-          alert('식품 추가가 완료되었습니다!')
+          Swal.fire({ title: '추가 완료!', text: '새 식품이 추가되었습니다.', icon: 'success', showConfirmButton: false, timer: 1500 })
           router.push({name: 'FoodList'})
         })
         .catch(() => {
-          alert('작성한 내용을 다시 확인해주세요.\n식품 보고번호는 숫자만 가능합니다.')
+          Swal.fire({ title: '작성 내용을 다시 확인해주세요.', text: '식품 보고번호는 숫자만 가능합니다.', icon: 'error', showConfirmButton: false, timer: 1500 })
         })
       }
     }
