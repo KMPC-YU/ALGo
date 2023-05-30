@@ -65,8 +65,8 @@ import router from "@/router/router.js";
 
 export default {
   setup() {
-    const username = ref('')
-    const password = ref('')
+    const username = ref('testuser')
+    const password = ref('1234!@abc')
 
     const idEmpty = computed(() => {
       return username.value === '' ? '' : 'field--not-empty'
