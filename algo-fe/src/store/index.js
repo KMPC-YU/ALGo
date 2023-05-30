@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import createPersistedState from "vuex-persistedstate";
 import * as AuthAPI from '@/services/auth.js'
+import router from "@/router/router.js";
 
 export default createStore({
     state: {
@@ -32,7 +33,9 @@ export default createStore({
                 AuthAPI.logout()
                     .then((res) => {
                         commit('setLoginStatus', 'false')
-                        location.reload()
+                        router.push('/').then(() => {
+                            location.reload()
+                        })
                         resolve(res)
                     })
                     .catch((err) => {
