@@ -1,10 +1,26 @@
 <template>
   <div class="container py-5">
-    <h2 class="mb-4">공지사항</h2>
+    <h2 class="mb-4">{{ boardName }}</h2>
     <div class="mt-3">
       <div class="form-group">
         <label for="title">제목</label>
-        <input type="text" v-model="title" class="form-control mt-2" id="title" placeholder="글 제목을 입력해주세요." maxlength="50" required>
+        <div class="row">
+          <div class="col-10">
+            <input type="text" v-model="title" class="form-control mt-2" id="title" placeholder="글 제목을 입력해주세요." maxlength="50" required>
+          </div>
+          <div class="col-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="is_notice" v-model="is_notice">
+              <label class="form-check-label" for="is_notice">
+                공지사항 등록
+              </label>
+            </div>
+          </div>
+        </div>
+        <div v-if="boardType === 'QUESTION'">
+          <label for="point" class="mt-4">포인트</label>
+          <input class="form-control" id="point" v-model="point">
+        </div>
       </div>
       <br/>
       <div class="form-group">
@@ -17,7 +33,7 @@
     </div>
     <div class="text-end mt-3">
       <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" @click="postWrite">
           <i class="fa-solid fa-pencil me-1"></i>
           글쓰기
         </button>
@@ -32,8 +48,13 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import StarterKit from '@tiptap/starter-kit'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+import * as PostAPI from '@/services/post.js'
 
 import MenuBar from '@compo/editor/MenuBar.vue'
+import {ref, computed, onMounted, watch} from "vue";
+import { useRoute } from 'vue-router'
+import Swal from "sweetalert2";
+import router from "@/router/router.js";
 
 export default {
   components: {
@@ -52,8 +73,87 @@ export default {
       ],
     })
 
+    const route = useRoute()
+    const boardID = computed(() => {
+      return route.params.board_id
+    })
+
+    const boardName = ref('')
+
+    watch(boardID, () => {
+      getBoardInfo()
+    })
+
+    onMounted(() => {
+      getBoardInfo()
+      if (route.path.endsWith('modify')) getPostDetail()
+    })
+
+    const getBoardInfo = () => {
+      PostAPI.BoardInfo(boardID.value).then((res) => {
+        boardName.value = res.data.board_name
+        boardType.value = res.data.board_type
+      })
+    }
+
+    const getPostDetail = () => {
+      let postID = route.params.post_id
+      PostAPI.postDetail(boardID.value, postID).then((res) => {
+        title.value = res.data.title
+        editor.value.commands.setContent(res.data.content)
+        is_notice.value = res.data.notice
+        point.value = res.data.point
+      }).catch((err) => {
+        console.error(err)
+      })
+    }
+
+    const title = ref('')
+    const is_notice = ref(false)
+    const boardType = ref('')
+    const point = ref(0)
+
+    const postWrite = () => {
+      if (title.value === '' || editor.value.getHTML() === '<p></p>') {
+        alert('게시글 내용을 모두 작성해주세요.')
+      } else {
+        if (route.path.endsWith('modify')) {
+          PostAPI.postModify(boardID.value, route.params.post_id, {
+            title: title.value,
+            content: editor.value.getHTML(),
+            point: point.value,
+            notice: is_notice.value,
+          }).then(() => {
+            Swal.fire({
+              title: '게시글이 수정되었습니다.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              router.push(`/boards/${boardID.value}`)
+            })
+          })
+        } else {
+          PostAPI.postWrite(boardID.value, {
+            title: title.value,
+            content: editor.value.getHTML(),
+            point: point.value,
+            notice: is_notice.value,
+          }).then(() => {
+            router.push(`/boards/${boardID.value}`)
+            Swal.fire({
+              title: '게시글이 등록되었습니다.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500,
+            })
+          })
+        }
+      }
+    }
+
     return {
-      editor,
+      editor, title, postWrite, is_notice, boardID, boardName, boardType, point
     }
   }
 }

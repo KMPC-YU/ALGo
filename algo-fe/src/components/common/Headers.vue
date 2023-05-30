@@ -15,9 +15,6 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <router-link class="nav-link" :class="{ active : currentRoute === '/boards/1'}" to="/boards/1">공지사항</router-link>
-                  </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">식품정보</a>
                     </li>
@@ -25,27 +22,49 @@
                         <a class="nav-link" href="#">레시피</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        공지사항
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li v-for="board in noticeList">
+                            <router-link class="dropdown-item" :to="{ name: 'PostList', params: { board_id: board.board_id }, query: { page: 1 } }">{{ board.name }}</router-link>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             자유게시판
                         </a>
-<!--                        <ul class="dropdown-menu">-->
-<!--                            <li><a class="dropdown-item" href="#">자유게시판</a></li>-->
-<!--                        </ul>-->
+                        <ul class="dropdown-menu">
+                          <li v-for="board in generalList">
+                            <router-link class="dropdown-item" :to="{ name: 'PostList', params: { board_id: board.board_id }, query: { page: 1 } }">{{ board.name }}</router-link>
+                          </li>
+                        </ul>
                     </li>
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       지식IN
                     </a>
+                    <ul class="dropdown-menu">
+                      <li v-for="board in questionList">
+                        <router-link class="dropdown-item" :to="{ name: 'PostList', params: { board_id: board.board_id }, query: { page: 1 } }">{{ board.name }}</router-link>
+                      </li>
+                    </ul>
                   </li>
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       익명게시판
                     </a>
+                    <ul class="dropdown-menu">
+                      <li v-for="board in anonymousList">
+                        <router-link class="dropdown-item" :to="{ name: 'PostList', params: { board_id: board.board_id }, query: { page: 1 } }">{{ board.name }}</router-link>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
                 <!-- Left links -->
 
-                <div v-if="!isLoggedIn" class="d-flex align-items-center">
+                <div v-if="isLoggedIn === 'false'" class="d-flex align-items-center">
                     <router-link class="btn btn-light px-3 me-2" to="/login">
                         로그인
                     </router-link>
@@ -53,7 +72,6 @@
                         회원가입
                     </router-link>
                 </div>
-
                 <div v-else class="d-flex align-items-center">
                     <!-- Icon -->
                     <a class="link-secondary me-4" href="#">
@@ -92,6 +110,9 @@
                             <li>
                                 <button class="dropdown-item" @click="logout">로그아웃</button>
                             </li>
+                            <li>
+                              <router-link class="dropdown-item" to="/admin">관리자</router-link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -104,12 +125,20 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import * as AdminAPI from '@/services/admin.js'
 
 export default {
     setup() {
+        onMounted(() => {
+          getBoardList('NOTICE')
+          getBoardList('GENERAL')
+          getBoardList('ANONYMOUS')
+          getBoardList('QUESTION')
+        })
+
         const store = useStore()
         const isLoggedIn = computed(() => {
             return store.getters.isLoggedIn
@@ -124,8 +153,27 @@ export default {
             store.dispatch('logout')
         }
 
+        const noticeList = ref('')
+        const generalList = ref('')
+        const anonymousList = ref('')
+        const questionList = ref('')
+
+        const getBoardList = (category) => {
+          AdminAPI.getBoardList(category).then((res) => {
+            if (category === 'NOTICE')
+              noticeList.value = res.data
+            if (category === 'GENERAL')
+              generalList.value = res.data
+            if (category === 'ANONYMOUS')
+              anonymousList.value = res.data
+            if (category === 'QUESTION')
+              questionList.value = res.data
+          })
+        }
+
         return {
-            isLoggedIn, logout, currentRoute
+            isLoggedIn, logout, currentRoute, getBoardList,
+            noticeList, generalList, anonymousList, questionList
         }
     }
 }

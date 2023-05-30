@@ -1,37 +1,30 @@
 <template>
   <div class="container py-5">
-    <h2 class="mb-4">공지사항</h2>
+<!--    <h2 class="mb-4">{{  }}</h2>-->
     <table class="table text-center">
       <thead class="table-secondary">
       <tr>
-        <th scope="col" class="p-3" colspan="8">식품알레르기정보, 레시피 공유 웹 서비스 ALGo 오픈 안내</th>
+        <th scope="col" class="p-3" colspan="8">{{ postDetailData.title }}</th>
       </tr>
       </thead>
       <tbody>
       <tr>
         <th class="col-md-1">작성자</th>
-        <td class="col-md-1 text-start" colspan="7">관리자</td>
+        <td class="col-md-1 text-start" colspan="7">{{ postDetailData.author }}</td>
       </tr>
       <tr>
         <th class="col-md-1 ">등록일</th>
-        <td class="col-md-7 text-start" colspan="3">2023-05-21 13:32</td>
+        <td class="col-md-7 text-start" colspan="3">{{ postDetailData.created_at }}</td>
         <th class="col-md-1 text-end">조회수</th>
-        <td class="col-md-1">12,345</td>
+        <td class="col-md-1">{{ postDetailData.view_count }}</td>
         <th class="col-md-1 text-end">추천수</th>
-        <td class="col-md-1">4</td>
+        <td class="col-md-1">{{ postDetailData.like_count }}</td>
       </tr>
       </tbody>
     </table>
 <!--    게시글 내용-->
     <div class="content px-4 py-2">
-      <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
-      <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-      <h4>Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC</h4>
-      <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
-      <h4>1914 translation by H. Rackham</h4>
-      <p>"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"</p>
-      <h4>Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC</h4>
-      <p>"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."</p>
+      <div v-dompurify-html="postDetailData.content"></div>
     </div>
 <!--    게시글 내용-->
     <hr/>
@@ -45,11 +38,11 @@
       </div>
       <div>
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-default">
+          <router-link type="button" class="btn btn-default" :to="{ name: 'PostModify', params: { board_id: boardID, post_id: postID }  }">
             <i class="fa-solid fa-pencil me-1"></i>
             수정
-          </button>
-          <button type="button" class="btn btn-default">
+          </router-link>
+          <button type="button" class="btn btn-default" @click="postDelete">
             <i class="fa-solid fa-trash me-1"></i>
             삭제
           </button>
@@ -79,16 +72,64 @@
 
 <script>
 import router from "@/router/router.js";
+import { useRoute } from 'vue-router'
+import * as PostAPI from '@/services/post.js'
+import { ref, onMounted, computed } from "vue";
+import {postDetail} from "@/services/post.js";
+import Swal from "sweetalert2";
 
 export default {
+  methods: {postDetail},
   setup() {
+    const route = useRoute()
+    const boardID = computed(() => {
+      return route.params.board_id
+    })
+
+    const postID = computed(() => {
+      return route.params.post_id
+    })
+
+    onMounted(() => {
+      getPostDetail()
+    })
 
     const moveToPostListPage = () => {
       router.go(-1)
     }
 
+    const postDetailData = ref('')
+
+    const getPostDetail = () => {
+      PostAPI.postDetail(boardID.value, postID.value).then((res) => {
+        console.log(res.data)
+        postDetailData.value = res.data
+      }).catch((err) => {
+        console.error(err)
+      })
+    }
+
+    const postDelete = () => {
+      PostAPI.postDelete(boardID.value, postID.value).then((res) => {
+        router.push(`/boards/${boardID.value}`)
+        Swal.fire({
+          title: '게시글이 삭제되었습니다.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+        }).catch(() => {
+          Swal.fire({
+            title: '게시글이 삭제에 실패했습니다',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        })
+      })
+    }
+
     return {
-      moveToPostListPage,
+      moveToPostListPage, postDetailData, boardID, postID, postDelete
     }
   }
 }
