@@ -4,7 +4,10 @@
     <table class="table text-center">
       <thead class="table-secondary">
       <tr>
-        <th scope="col" class="p-3" colspan="8">{{ postDetailData.title }}</th>
+        <th scope="col" class="p-3" colspan="8">
+          <span v-if="boardType === 'QUESTION'" class="point">100</span>
+          {{ postDetailData.title }}
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -20,6 +23,10 @@
         <th class="col-md-1 text-end">추천수</th>
         <td class="col-md-1">{{ postDetailData.like_count }}</td>
       </tr>
+      <tr v-if="boardType === 'QUESTION'">
+        <th class="col-md-1">채택 포인트</th>
+        <td class="col-md-1 text-start" colspan="7">100</td>
+      </tr>
       </tbody>
     </table>
 <!--    게시글 내용-->
@@ -31,9 +38,9 @@
 <!--    버튼 영역-->
     <div class="d-flex mt-2">
       <div class="me-auto">
-        <div class="btn btn-default">
-          <i class="fa-solid fa-thumbs-up"></i>
-          추천
+        <div class="btn" :class="[postDetailData.is_like ? 'btn-like' : 'btn-default' ]" @click="postLikeHandler">
+          <i class="bi" :class="[postDetailData.is_like ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up']"></i>
+          <span> 추천</span>
         </div>
       </div>
       <div>
@@ -55,18 +62,9 @@
     </div>
     <br/>
 <!--    버튼 영역-->
-
-<!--    댓글 영역-->
-    <div class="row card-body mt-2">
-      <div class="input-group mb-2">
-        <textarea class="form-control" placeholder="댓글을 남겨보세요" @keydown="resize" @keyup="resize" style="resize:none; overflow: hidden"/>
-        <button class="btn btn-default" type="button" @click="addComment">등록</button>
-      </div>
-      <span class="fw-bold">댓글
-        <span class="text-primary">0</span>
-      </span>
+    <div>
+      <comment-write :boardID="boardID" :postID="postID"/>
     </div>
-<!--    댓글 영역-->
   </div>
 </template>
 
@@ -75,11 +73,13 @@ import router from "@/router/router.js";
 import { useRoute } from 'vue-router'
 import * as PostAPI from '@/services/post.js'
 import { ref, onMounted, computed } from "vue";
-import {postDetail} from "@/services/post.js";
 import Swal from "sweetalert2";
+import CommentWrite from "@views/Comment/CommentWrite.vue";
 
 export default {
-  methods: {postDetail},
+  components: {
+    CommentWrite,
+  },
   setup() {
     const route = useRoute()
     const boardID = computed(() => {
@@ -92,6 +92,7 @@ export default {
 
     onMounted(() => {
       getPostDetail()
+      getBoardInfo()
     })
 
     const moveToPostListPage = () => {
@@ -99,6 +100,7 @@ export default {
     }
 
     const postDetailData = ref('')
+    const boardType = ref('')
 
     const getPostDetail = () => {
       PostAPI.postDetail(boardID.value, postID.value).then((res) => {
@@ -109,27 +111,51 @@ export default {
       })
     }
 
-    const postDelete = () => {
-      PostAPI.postDelete(boardID.value, postID.value).then((res) => {
-        router.push(`/boards/${boardID.value}`)
-        Swal.fire({
-          title: '게시글이 삭제되었습니다.',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500,
-        }).catch(() => {
-          Swal.fire({
-            title: '게시글이 삭제에 실패했습니다',
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 1500,
-          })
-        })
+    const getBoardInfo = () => {
+      PostAPI.BoardInfo(boardID.value).then((res) => {
+        boardType.value = res.data.board_type
       })
     }
 
+    const postDelete = () => {
+      Swal.fire({
+        title: '게시글을 삭제하시겠습니까?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          PostAPI.postDelete(boardID.value, postID.value).then(() => {
+            router.push({ name: 'PostList', params: { board_id: boardID.value }, query: { page: 1 } })
+          })
+        }
+      })
+    }
+
+    const postLikeHandler = () => {
+      console.log(postDetailData.value.is_like)
+      if (postDetailData.value.is_like) {
+        PostAPI.postLikeDelete(boardID.value, postID.value).then(() => {
+          alert('추천취소됨')
+          getPostDetail()
+        }).catch((err) => {
+          console.error(err)
+        })
+      } else {
+        PostAPI.postLikeCreate(boardID.value, postID.value).then(() => {
+          alert('추천완료')
+          getPostDetail()
+        }).catch((err) => {
+          console.error(err)
+        })
+      }
+    }
+
     return {
-      moveToPostListPage, postDetailData, boardID, postID, postDelete
+      moveToPostListPage, postDetailData, boardID, postID, postDelete, postLikeHandler, boardType,
     }
   }
 }
@@ -152,5 +178,30 @@ export default {
   background: #fafafa;
   //color: #ffffff;
   border-color: #000000;
+}
+
+.btn-like {
+  color: #FFA500;
+  background-color: #ffffff;
+  border-color: #FFA500;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+.btn-like:hover,
+.btn-like:active,
+.btn-like:focus {
+  background: #fafafa;
+  color: #FFA500;
+  border-color: #FFA500;
+}
+
+.point {
+  background-color: #7f8fa4;
+  border-radius: 2px;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 3px;
+  margin-right: 5px;
+  font-size: 15px;
 }
 </style>

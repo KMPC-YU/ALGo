@@ -35,6 +35,16 @@ export function postDetail(board_id, post_id) {
     return instance.get(`/api/v1/boards/${board_id}/posts/${post_id}`)
 }
 
+// 게시글 추천
+export function postLikeCreate(board_id, post_id) {
+    return instance.post(`/api/v1/boards/${board_id}/posts/${post_id}/likes`)
+}
+
+// 게시글 추천 취소
+export function postLikeDelete(board_id, post_id) {
+    return instance.delete(`/api/v1/boards/${board_id}/posts/${post_id}/likes`)
+}
+
 // 게시판 정보
 export function BoardInfo(board_id) {
     return instance.get(`/api/v1/boards/${board_id}/types`)

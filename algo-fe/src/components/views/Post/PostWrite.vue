@@ -4,7 +4,7 @@
     <div class="mt-3">
       <div class="form-group">
         <label for="title">제목</label>
-        <div class="row">
+        <div class="row align-items-center">
           <div class="col-10">
             <input type="text" v-model="title" class="form-control mt-2" id="title" placeholder="글 제목을 입력해주세요." maxlength="50" required>
           </div>
@@ -18,7 +18,7 @@
           </div>
         </div>
         <div v-if="boardType === 'QUESTION'">
-          <label for="point" class="mt-4">포인트</label>
+          <label for="point" class="mt-4">채택 포인트 (보유 포인트 : 0)</label>
           <input class="form-control" id="point" v-model="point">
         </div>
       </div>
@@ -124,14 +124,7 @@ export default {
             point: point.value,
             notice: is_notice.value,
           }).then(() => {
-            Swal.fire({
-              title: '게시글이 수정되었습니다.',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500,
-            }).then(() => {
-              router.push(`/boards/${boardID.value}`)
-            })
+            router.push({ name: 'PostList', params: { board_id: boardID.value }, query: { page: 1 } })
           })
         } else {
           PostAPI.postWrite(boardID.value, {
@@ -140,13 +133,7 @@ export default {
             point: point.value,
             notice: is_notice.value,
           }).then(() => {
-            router.push(`/boards/${boardID.value}`)
-            Swal.fire({
-              title: '게시글이 등록되었습니다.',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500,
-            })
+            router.push({ name: 'PostList', params: { board_id: boardID.value }, query: { page: 1 } })
           })
         }
       }

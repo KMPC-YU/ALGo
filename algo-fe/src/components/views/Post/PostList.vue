@@ -39,14 +39,16 @@
           <th scope="col" class="col-md-1">작성자</th>
           <th scope="col" class="col-md-2 d-none d-md-table-cell">등록일</th>
           <th scope="col" class="col-md-1 d-none d-md-table-cell">조회수</th>
-          <th scope="col" class="col-md-1 d-none d-md-table-cell">추천수</th>
+          <th scope="col" v-if="boardType !== 'QUESTION'" class="col-md-1 d-none d-md-table-cell">추천수</th>
+          <th scope="col" v-else class="col-md-1 d-none d-md-table-cell">답변수</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody v-if="postData.length > 0">
           <tr v-for="post in postData">
             <td class="d-none d-md-table-cell" v-if="post.notice">공지</td>
             <td class="d-none d-md-table-cell" v-else>{{ post.id }}</td>
             <td>
+              <span v-if="boardType === 'QUESTION'" class="point">100</span>
               <router-link :to="{ name: 'PostDetail', params: { board_id: boardID, post_id: post.id } }" class="text-decoration-none text-black post-title">
                 {{ post.title }}
               </router-link>
@@ -54,7 +56,15 @@
             <td>{{ post.author }}</td>
             <td class="d-none d-md-table-cell">{{ post.created_at }}</td>
             <td class="d-none d-md-table-cell">{{ post.view_count }}</td>
-            <td class="d-none d-md-table-cell">{{ post.like_count }}</td>
+            <td v-if="boardType !== 'QUESTION'" class="d-none d-md-table-cell">{{ post.like_count }}</td>
+            <td v-else class="d-none d-md-table-cell">0</td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td colspan="6">
+              <span>작성된 글이 없습니다.</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -94,14 +104,23 @@ export default {
       return route.params.board_id
     })
     const boardName = ref('')
+    const boardType = ref('')
 
     watch(boardID, () => {
       getPostsList(boardID.value, 1)
+      getBoardInfo()
     })
 
     onMounted(() => {
       getPostsList(boardID.value, 1)
+      getBoardInfo()
     })
+
+    const getBoardInfo = () => {
+      PostAPI.BoardInfo(boardID.value).then((res) => {
+        boardType.value = res.data.board_type
+      })
+    }
 
     const postData = ref('')
     const getPostsList = (boardID, page) => {
@@ -122,7 +141,7 @@ export default {
 
     }
 
-    return { selectedSearch, searchText, selectedSort, searchPost, boardID, postData, boardName }
+    return { selectedSearch, searchText, selectedSort, searchPost, boardID, postData, boardName, boardType }
   }
 }
 
@@ -136,7 +155,15 @@ export default {
   max-width: 100px;
 }
 .post-title:hover {
-
   font-weight: bold;
+}
+.point {
+  background-color: #7f8fa4;
+  border-radius: 2px;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 3px;
+  margin-right: 5px;
+  font-size: 12px;
 }
 </style>
