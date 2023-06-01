@@ -105,7 +105,7 @@
                             aria-labelledby="navbarDropdownMenuLink"
                         >
                             <li>
-                                <a class="dropdown-item" href="#">프로필</a>
+                                <a class="dropdown-item" href="/profiles/1">프로필</a>
                             </li>
                             <li>
                                 <button class="dropdown-item" @click="logout">로그아웃</button>
