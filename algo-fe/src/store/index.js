@@ -6,20 +6,26 @@ import router from "@/router/router.js";
 export default createStore({
     state: {
         isLoggedIn: false,
+        nickname: null,
     },
     getters: {
-        isLoggedIn: (state) => state.isLoggedIn
+        isLoggedIn: (state) => state.isLoggedIn,
+        nickname: (state) => state.nickname
     },
     mutations: {
         setLoginStatus(state, status) {
             state.isLoggedIn = status;
         },
+        setNickname(state, status) {
+            state.nickname = status;
+        }
     },
     actions: {
         login({ commit }, loginData) {
             return new Promise((resolve, reject) => {
                 AuthAPI.login(loginData)
                     .then((res) => {
+                        commit('setNickname', res.data.nickname)
                         commit('setLoginStatus', 'true')
                         resolve(res)
                     })
