@@ -35,29 +35,51 @@
         <thead class="table-dark">
         <tr>
           <th scope="col" class="col-md-1 d-none d-md-table-cell">번호</th>
-          <th scope="col" class="col-9 col-md-6">제목</th>
+          <th scope="col" :class="[boardType === 'QUESTION' ? 'col-6 col-md-5' : 'col-9 col-md-6']">제목</th>
           <th scope="col" class="col-md-1">작성자</th>
           <th scope="col" class="col-md-2 d-none d-md-table-cell">등록일</th>
           <th scope="col" class="col-md-1 d-none d-md-table-cell">조회수</th>
-          <th scope="col" v-if="boardType !== 'QUESTION'" class="col-md-1 d-none d-md-table-cell">추천수</th>
-          <th scope="col" v-else class="col-md-1 d-none d-md-table-cell">답변수</th>
+          <th scope="col" class="col-md-1 d-none d-md-table-cell">추천수</th>
+          <th v-if="boardType === 'QUESTION'" scope="col" class="col-md-1 d-none d-md-table-cell">답변수</th>
         </tr>
         </thead>
+        <tbody v-if="noticePostData.length > 0">
+          <tr v-for="noticePost in noticePostData">
+            <td class="d-none d-md-table-cell title-notice">공지</td>
+            <td>
+              <router-link :to="{ name: 'PostDetail', params: { board_id: boardID, post_id: noticePost.id } }" class="text-decoration-none text-black title-notice">
+                <span class="title-notice">
+                  {{ noticePost.title }}
+                  <span v-if="boardType !== 'QUESTION'">
+                    [{{noticePost.comment_count}}]
+                  </span>
+                </span>
+              </router-link>
+            </td>
+            <td>{{ noticePost.author }}</td>
+            <td class="d-none d-md-table-cell">{{ noticePost.created_at }}</td>
+            <td class="d-none d-md-table-cell">{{ noticePost.view_count }}</td>
+            <td class="d-none d-md-table-cell">{{ noticePost.like_count }}</td>
+          </tr>
+        </tbody>
         <tbody v-if="postData.length > 0">
           <tr v-for="post in postData">
-            <td class="d-none d-md-table-cell" v-if="post.notice">공지</td>
-            <td class="d-none d-md-table-cell" v-else>{{ post.id }}</td>
+            <td class="d-none d-md-table-cell">{{ post.id }}</td>
             <td>
               <span v-if="boardType === 'QUESTION'" class="point">100</span>
               <router-link :to="{ name: 'PostDetail', params: { board_id: boardID, post_id: post.id } }" class="text-decoration-none text-black post-title">
-                {{ post.title }}
+                <span class="post-title">
+                  {{ post.title }}
+                  <span v-if="boardType !== 'QUESTION'">
+                    [{{post.comment_count}}]
+                  </span>
+                </span>
               </router-link>
             </td>
             <td>{{ post.author }}</td>
             <td class="d-none d-md-table-cell">{{ post.created_at }}</td>
             <td class="d-none d-md-table-cell">{{ post.view_count }}</td>
-            <td v-if="boardType !== 'QUESTION'" class="d-none d-md-table-cell">{{ post.like_count }}</td>
-            <td v-else class="d-none d-md-table-cell">0</td>
+            <td class="d-none d-md-table-cell">{{ post.like_count }}</td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -123,6 +145,7 @@ export default {
     }
 
     const postData = ref('')
+    const noticePostData = ref('')
     const getPostsList = (boardID, page) => {
       PostAPI.getPostsList(boardID, page).then((res) => {
         console.log(res.data)
@@ -130,6 +153,11 @@ export default {
         postData.value = res.data.postListDto
       }).catch((err) => {
         console.error(err)
+      })
+
+      PostAPI.getNoticeList(boardID).then((res) => {
+        console.log(res)
+        noticePostData.value = res.data
       })
     }
 
@@ -141,7 +169,10 @@ export default {
 
     }
 
-    return { selectedSearch, searchText, selectedSort, searchPost, boardID, postData, boardName, boardType }
+    return {
+      selectedSearch, searchText, selectedSort, searchPost,
+      boardID, postData, boardName, boardType, noticePostData
+    }
   }
 }
 
@@ -165,5 +196,8 @@ export default {
   padding: 3px;
   margin-right: 5px;
   font-size: 12px;
+}
+.title-notice {
+  font-weight: bold;
 }
 </style>

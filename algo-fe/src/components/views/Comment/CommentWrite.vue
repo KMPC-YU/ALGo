@@ -117,7 +117,11 @@ export default {
       CommentAPI.getCommentsList(props.boardID, props.postID, page)
           .then((res) => {
             console.log(res.data)
-            numOfCommPage.value = res.data.page_num
+            if (res.data.page_num === 0) {
+              numOfCommPage.value = 1
+            } else {
+              numOfCommPage.value = res.data.page_num
+            }
             commentList.value = res.data.commentListDto
             commentCnt.value = res.data.comment_num
           })

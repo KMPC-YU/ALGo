@@ -5,6 +5,10 @@ export function getPostsList(board_id, page) {
     return instance.get(`/api/v1/boards/${board_id}/posts?page=${page}&size=10&sort=createdAt,DESC`)
 }
 
+export function getNoticeList(board_id) {
+    return instance.get(`/api/v1/boards/${board_id}/posts/notices`)
+}
+
 // 게시글 작성
 export function postWrite(board_id, postData) {
     return instance.post(`/api/v1/boards/${board_id}/posts`, {
