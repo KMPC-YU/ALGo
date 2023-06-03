@@ -8,21 +8,21 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+      <div class="sidebar-brand d-flex align-items-center justify-content-center">
         <div class="sidebar-brand-icon">
           <img src="/ALGo_Logo.ico" alt="ALGo Logo" width="40"/>
         </div>
         <div class="sidebar-brand-text mx-3">ALGo ADMIN</div>
-      </a>
+      </div>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="#" @click="menu(0)">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>대시보드 홈</span></a>
+          <i class="fas fa-fw fa-house"></i>
+          <span> 대시보드 홈</span></a>
       </li>
 
       <!-- Divider -->
@@ -31,15 +31,15 @@
       <!-- Nav Item - Boards -->
       <li class="nav-item">
         <a class="nav-link" href="#" @click="menu(1)">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>게시판 관리</span></a>
+          <i class="fas fa-fw fa-table"></i>
+          <span> 게시판 관리</span></a>
       </li>
 
       <!-- Nav Item - Users -->
       <li class="nav-item">
         <a class="nav-link" href="#" @click="menu(2)">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>사용자 관리</span></a>
+          <i class="fas fa-fw fa-user"></i>
+          <span> 사용자 관리</span></a>
       </li>
 
       <!-- Divider -->
@@ -48,15 +48,15 @@
       <!-- Nav Item - Point -->
       <li class="nav-item">
         <a class="nav-link" href="#" @click="menu(3)">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>포인트 관리</span></a>
+          <i class="fas fa-fw fa-coins"></i>
+          <span> 포인트 관리</span></a>
       </li>
 
       <!-- Nav Item - Terms -->
       <li class="nav-item">
         <a class="nav-link" href="#" @click="menu(4)">
-          <i class="fas fa-fw fa-table"></i>
-          <span>이용약관 관리</span></a>
+          <i class="fas fa-fw fa-newspaper"></i>
+          <span> 이용약관 관리</span></a>
       </li>
 
       <!-- Divider -->
@@ -98,7 +98,7 @@
                       <div class="h5 mb-0 font-weight-bold text-gray-800">25개</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                      <i class="fas fa-plate-wheat fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -116,7 +116,7 @@
                       <div class="h5 mb-0 font-weight-bold text-gray-800">50개</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -134,7 +134,7 @@
                       <div class="h5 mb-0 font-weight-bold text-gray-800">200개</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <i class="fas fa-comments fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -152,7 +152,7 @@
                       <div class="h5 mb-0 font-weight-bold text-gray-800">30명</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      <i class="fas fa-user fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -228,6 +228,200 @@
         </div>
         <!-- End of Boards Page Content -->
 
+        <!-- User Page Content -->
+        <div v-if="page === 2" class="container py-5">
+          <div class="container py-5">
+            <!-- 검색 및 정렬 영역 -->
+            <div class="row mb-4">
+              <div class="col-auto">
+                <h3>총 57명</h3>
+              </div>
+              <div class="col-auto ms-auto">
+                <div class="d-none d-md-block">
+                  <select v-model="selectedSearch" class="form-select">
+                    <option value=",DESC">ID</option>
+                    <option value=",DESC">닉네임</option>
+                    <option value=",DESC">이메일</option>
+                    <option value=",DESC">회원구분</option>
+                    <option value=",DESC">가입일</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-7 col-md-5 col-lg-4 col-xl-3">
+                <div class="input-group">
+                  <input type="search" class="form-control" v-model="searchUserText" @keyup.enter="searchUser" placeholder="검색">
+                  <button class="btn btn-primary" @click="searchUser">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- 검색 및 정렬 영역 -->
+            <!-- 포인트 목록 및 랭킹 테이블 -->
+            <table class="table text-center">
+              <thead class="table-dark">
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">#</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">ID</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">닉네임</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">이메일</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">회원구분</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">가입일</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="d-none d-md-table-cell">1</td>
+                  <td>admin</td>
+                  <td>Jisoo</td>
+                  <td>hihijisoo@algo.com</td>
+                  <td>관리자</td>
+                  <td class="d-none d-md-table-cell">2023-01-01</td>
+                </tr>
+                <tr>
+                  <td class="d-none d-md-table-cell">2</td>
+                  <td>guest</td>
+                  <td>게스트1</td>
+                  <td>guest@algo.com</td>
+                  <td>회원</td>
+                  <td class="d-none d-md-table-cell">2023-01-02</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- 포인트 목록 및 랭킹 테이블 -->
+
+            <!-- 사용 내역 페이지네이션 -->
+            <nav aria-label="User page navigation">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                  </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <!-- 사용 내역 페이지네이션 -->
+          </div>
+        </div>
+        <!-- End of User Page Content -->
+
+        <!-- Point Page Content -->
+        <div v-if="page === 3" class="container py-5">
+          <div class="container py-5">
+            <!-- 검색 및 정렬 영역 -->
+            <div class="row mb-4">
+              <div class="col-auto ms-auto">
+                <div class="d-none d-md-block">
+                  <select v-model="selectedSearch" class="form-select">
+                    <option value=",DESC">ID</option>
+                    <option value=",DESC">닉네임</option>
+                    <option value=",DESC">포인트</option>
+                    <option value=",DESC">회원구분</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-7 col-md-5 col-lg-4 col-xl-3">
+                <div class="input-group">
+                  <input type="search" class="form-control" v-model="searchUserText" @keyup.enter="searchUser" placeholder="검색">
+                  <button class="btn btn-primary" @click="searchUser">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- 검색 및 정렬 영역 -->
+            <!-- 포인트 목록 및 랭킹 테이블 -->
+            <table class="table text-center">
+              <thead class="table-dark">
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">#</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">ID</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">닉네임</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">포인트</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell">회원구분</th>
+                <th scope="col" class="col-md-2 d-none d-md-table-cell"></th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="d-none d-md-table-cell">1</td>
+                  <td>admin</td>
+                  <td>Jisoo</td>
+                  <td>5256</td>
+                  <td>관리자</td>
+                  <td class="d-none d-md-table-cell">
+                    <button class="btn btn-primary btn-sm">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="d-none d-md-table-cell">2</td>
+                  <td>guest</td>
+                  <td>게스트1</td>
+                  <td>1557</td>
+                  <td>회원</td>
+                  <td class="d-none d-md-table-cell">
+                    <button class="btn btn-primary btn-sm">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- 포인트 목록 및 랭킹 테이블 -->
+
+            <!-- 사용 내역 페이지네이션 -->
+            <nav aria-label="User page navigation">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                  </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <!-- 사용 내역 페이지네이션 -->
+          </div>
+        </div>
+        <!-- End of Point Page Content -->
+
+        <!-- Terms Page Content -->
+        <div v-if="page === 4" class="container py-5">
+          <div class="card d-flex justify-content-center align-items-center">
+            <div class="card-body">
+              <div class="mb-4">
+                <div class="fs-4 fw-bold">
+                  <i class="bi bi-check-lg me-1"></i>
+                  <label for="condition-terms1" class="form-label">이용약관 수정</label>
+                </div>
+                <textarea class="form-control shadow-sm" id="condition-terms1" :value="conditionAndTerms1" cols="70" rows="10"></textarea>
+                <div class="col-12 d-flex justify-content-end mt-3 px-0">
+                  <button class="btn btn-primary">저장</button>
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="fs-4 fw-bold">
+                  <i class="bi bi-check-lg me-1"></i>
+                  <label for="condition-terms2" class="form-label">개인정보 수집 및 이용</label>
+                </div>
+                <textarea class="form-control shadow-sm" id="condition-terms2" :value="conditionAndTerms2" cols="70" rows="10"></textarea>
+                <div class="col-12 d-flex justify-content-end mt-3 px-0">
+                  <button class="btn btn-primary">저장</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End of Terms Page Content -->
       </div>
       <!-- End of Main Content -->
 
@@ -270,6 +464,9 @@ export default {
   const name = ref('')
   const page = ref(0)
 
+  const conditionAndTerms1 = '이용약관 내용'
+  const conditionAndTerms2 = '개인정보 수집 및 동의 내용'
+
   const createBoard = () => {
     if (type.value === "") {
     alert('게시판 타입을 선택하세요')
@@ -304,6 +501,7 @@ export default {
   }
 
   return {
+    conditionAndTerms1, conditionAndTerms2,
     type, name, page, createBoard, menu,
   }
   }
