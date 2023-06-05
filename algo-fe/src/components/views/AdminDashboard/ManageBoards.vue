@@ -175,7 +175,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
-                    <canvas id="myAreaChart"></canvas>
+                    <Line :data="lineChartData" :options="lineChartOpt"/>
                   </div>
                 </div>
               </div>
@@ -192,18 +192,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
-                  </div>
-                  <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Social
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
-                    </span>
+                    <Doughnut :data="donutChartData" :options="donutChartOpt"/>
                   </div>
                 </div>
               </div>
@@ -457,12 +446,94 @@
 <script>
 import { ref } from 'vue'
 import * as AdminAPI from '@/services/admin.js'
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2'
+import { Doughnut, Line } from 'vue-chartjs'
+import Chart from 'chart.js/auto'
+
 export default {
+  components: {
+    Doughnut,
+    Line,
+  },
   setup() {
   const type = ref('')
   const name = ref('')
   const page = ref(0)
+
+  const lineChartData = {
+    labels: ['3월', '4월', '5월', '6월'],
+    datasets: [{
+      label: '게시글 수',
+      data: [2, 20, 26, 50],
+      tension: 0.3,
+      backgroundColor: 'rgba(78, 115, 223, 0.05)',
+      borderColor: 'rgba(78, 115, 223, 1)',
+      pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+      fill: true,
+    }]
+}
+  const lineChartOpt = {
+  responsive: true,
+  maintainAspectRatio: false,
+  layout: {
+    padding: {
+      left: 10,
+      right: 25,
+      top: 25,
+      bottom: 0
+    }
+  },
+  scales: {
+    x: {
+      border: {
+        display: false,
+      },
+      grid: {
+        display: false,
+      },
+      ticks: {
+        maxTicksLimit: 7,
+      }
+    },
+    y: {
+      border: {
+        display: false,
+        dash: [2],
+      },
+      grid: {
+        tickBorderDash: [2],
+      },
+      ticks: {
+        maxTicksLimit: 5,
+        padding: 10,
+      }
+    }
+  },
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      backgroundColor: '#ffffff',
+      bodyColor: '#858796',
+      displayColors: false,
+    }
+  }
+}
+
+  const donutChartData = {
+    labels: ['밑반찬', '디저트', '과자', '양식'],
+    datasets: [
+      {
+        backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+        data: [2, 10, 5, 8]
+      }
+    ]
+  }
+  const donutChartOpt = {
+    responsive: true,
+    maintainAspectRatio: false
+  }
 
   const conditionAndTerms1 = '이용약관 내용'
   const conditionAndTerms2 = '개인정보 수집 및 동의 내용'
@@ -502,6 +573,8 @@ export default {
 
   return {
     conditionAndTerms1, conditionAndTerms2,
+    lineChartData, lineChartOpt,
+    donutChartData, donutChartOpt,
     type, name, page, createBoard, menu,
   }
   }
