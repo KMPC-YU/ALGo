@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
+  <div style="max-width:400px">
     <section style="background-color: #eee;">
-      <div class="container py-5">
+      <div>
 
-        <div class="row d-flex justify-content-center">
-          <div class="col-md-8 col-lg-6 col-xl-4">
+        <div>
+          <div>
 
             <div class="card" id="chat1" style="border-radius: 15px;">
               <div
@@ -12,7 +12,7 @@
                   style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
                 <i class="fas fa-angle-left"></i>
                 <p class="mb-0 fw-bold">ALGo 챗봇 서비스</p>
-                <i class="fas fa-times"></i>
+                <i class="fas fa-times" @click="closeChatbot"></i>
               </div>
               <div class="card-body">
 
@@ -66,7 +66,15 @@
 
 <script>
 export default {
+  setup(props, { emit }) {
+    const closeChatbot = () => {
+      emit('showChatbot')
+    }
 
+    return {
+      closeChatbot,
+    }
+  }
 }
 </script>
 

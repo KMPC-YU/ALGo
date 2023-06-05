@@ -74,7 +74,7 @@
                 </div>
                 <div v-else class="d-flex align-items-center">
                     <!-- Icon -->
-                    <a class="link-secondary me-4" href="#">
+                    <a class="link-secondary me-4" href="/chat">
                         <i class="fa-solid fa-comments fa-2xl"></i>
                         <span class="position-absolute top-40 start-20 translate-middle badge rounded-pill bg-danger">
                             99+
