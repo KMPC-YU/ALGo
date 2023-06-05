@@ -4,7 +4,7 @@
 <!--      검색 및 정렬 영역-->
       <div class="row mb-4">
         <div class="col-auto">
-          <select v-model="selectedSort" class="form-select">
+          <select v-model="selectedSort" @change="getPostsList(1)" class="form-select">
             <option value="createdAt,DESC">작성일</option>
             <option value="viewCount,DESC">조회수</option>
             <option value="likeCount,DESC">추천수</option>
@@ -60,13 +60,14 @@
             <td class="d-none d-md-table-cell">{{ noticePost.created_at }}</td>
             <td class="d-none d-md-table-cell">{{ noticePost.view_count }}</td>
             <td class="d-none d-md-table-cell">{{ noticePost.like_count }}</td>
+            <td v-if="boardType === 'QUESTION'" class="d-none d-md-table-cell">{{ noticePost.comment_count }}</td>
           </tr>
         </tbody>
         <tbody v-if="postData.length > 0">
           <tr v-for="post in postData">
             <td class="d-none d-md-table-cell">{{ post.id }}</td>
             <td>
-              <span v-if="boardType === 'QUESTION'" class="point">100</span>
+              <span v-if="boardType === 'QUESTION'" class="point">{{ post.point }}</span>
               <router-link :to="{ name: 'PostDetail', params: { board_id: boardID, post_id: post.id } }" class="text-decoration-none text-black post-title">
                 <span class="post-title">
                   {{ post.title }}
@@ -80,11 +81,12 @@
             <td class="d-none d-md-table-cell">{{ post.created_at }}</td>
             <td class="d-none d-md-table-cell">{{ post.view_count }}</td>
             <td class="d-none d-md-table-cell">{{ post.like_count }}</td>
+            <td v-if="boardType === 'QUESTION'" class="d-none d-md-table-cell">{{ post.comment_count }}</td>
           </tr>
         </tbody>
-        <tbody v-else>
+        <tbody v-if="postData.length === 0 && noticePostData.length === 0">
           <tr>
-            <td colspan="6">
+            <td :colspan="[boardType === 'QUESTION' ? 6 : 7]">
               <span>작성된 글이 없습니다.</span>
             </td>
           </tr>
@@ -128,35 +130,41 @@ export default {
     const boardName = ref('')
     const boardType = ref('')
 
-    watch(boardID, () => {
-      getPostsList(boardID.value, 1)
+    watch(boardID,  () => {
       getBoardInfo()
     })
 
-    onMounted(() => {
-      getPostsList(boardID.value, 1)
+    onMounted( () => {
       getBoardInfo()
     })
 
     const getBoardInfo = () => {
       PostAPI.BoardInfo(boardID.value).then((res) => {
+        boardName.value = res.data.board_name
         boardType.value = res.data.board_type
+        getPostsList(1)
       })
     }
 
     const postData = ref('')
     const noticePostData = ref('')
-    const getPostsList = (boardID, page) => {
-      PostAPI.getPostsList(boardID, page).then((res) => {
-        console.log(res.data)
-        boardName.value = res.data.board_name
-        postData.value = res.data.postListDto
-      }).catch((err) => {
-        console.error(err)
-      })
+    const getPostsList = (page) => {
+      if (boardType.value === 'QUESTION') {
+        PostAPI.getQuestionList(boardID.value, page, selectedSort.value).then((res) => {
+          postData.value = res.data.questionListDto
+        }).catch((err) => {
+          console.error(err)
+        })
+      } else {
+        PostAPI.getPostsList(boardID.value, page, selectedSort.value).then((res) => {
+          console.log(res.data)
+          postData.value = res.data.postListDto
+        }).catch((err) => {
+          console.error(err)
+        })
+      }
 
-      PostAPI.getNoticeList(boardID).then((res) => {
-        console.log(res)
+      PostAPI.getNoticeList(boardID.value).then((res) => {
         noticePostData.value = res.data
       })
     }
@@ -171,7 +179,7 @@ export default {
 
     return {
       selectedSearch, searchText, selectedSort, searchPost,
-      boardID, postData, boardName, boardType, noticePostData
+      boardID, postData, boardName, boardType, noticePostData, getPostsList
     }
   }
 }

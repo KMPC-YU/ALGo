@@ -1,12 +1,16 @@
 import { instance } from './index.js'
 
 // 게시글 목록
-export function getPostsList(board_id, page) {
-    return instance.get(`/api/v1/boards/${board_id}/posts?page=${page}&size=10&sort=createdAt,DESC`)
+export function getPostsList(board_id, page, sort) {
+    return instance.get(`/api/v1/boards/${board_id}/posts?page=${page}&size=10&sort=${sort}`)
 }
 
 export function getNoticeList(board_id) {
     return instance.get(`/api/v1/boards/${board_id}/posts/notices`)
+}
+
+export function getQuestionList(board_id, page, sort) {
+    return instance.get(`/api/v1/boards/${board_id}/posts/questions?page=${page}&size=10&sort=${sort}`)
 }
 
 // 게시글 작성
