@@ -24,11 +24,13 @@ public class PostResponseDto {
     private Long viewCount;
     @JsonProperty("is_like")
     private Boolean isLike;
+    private Boolean notice;
+    private Integer point;
     @JsonProperty("created_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
-    public PostResponseDto(Post post, Boolean isLike, Boolean isAnonymous){
+    public PostResponseDto(Post post, Boolean isLike, Boolean isAnonymous, Integer point){
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
@@ -36,6 +38,8 @@ public class PostResponseDto {
         this.commentCount = post.getCommentCount();
         this.likeCount = post.getLikeCount();
         this.isLike = isLike;
+        this.notice = post.getIsNotice();
+        this.point = point;
         this.viewCount = post.getViewCount();
         this.createdAt = post.getCreatedAt();
     }
