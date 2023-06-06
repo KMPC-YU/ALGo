@@ -28,4 +28,8 @@ public class Anonymous extends Post{
         super(board, user, title, content, isNotice);
     }
 
+    public void updateCount(){
+        this.anonymousCount++;
+    }
+
 }
