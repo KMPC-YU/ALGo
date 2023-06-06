@@ -5,6 +5,8 @@
 
 <div align="center">
     <img src='https://img.shields.io/badge/SpringBoot-3.0.4-brightgreen' alt="springboot">
+    <img src='https://img.shields.io/badge/QueryDsl-5.0.0-blue' alt="querydsl">
+    <img src='https://img.shields.io/badge/Swagger-3.0.3-brightgreen' alt="swagger">
     <img src='https://img.shields.io/badge/Vue-3.2.47-brightgreen' alt="vue">
     <img src='https://img.shields.io/badge/Vuex-4.1.0-green' alt="vuex">
     <img src='https://img.shields.io/badge/Bootstrap-5.3.0-blue' alt="bootstrap">
