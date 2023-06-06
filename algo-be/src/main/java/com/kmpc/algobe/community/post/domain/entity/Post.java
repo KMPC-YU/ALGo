@@ -39,7 +39,7 @@ public class Post extends BaseTimeEntity{
     @NotNull
     private User user;
 
-    @Size(max = 50)
+    @Size(min = 1, max = 50)
     @NotNull
     private String title;
 
@@ -83,4 +83,10 @@ public class Post extends BaseTimeEntity{
     public void updateNotice(Boolean isNotice){
         this.isNotice = isNotice;
     }
+
+    public void updateCommentCount(int symbol){
+        this.commentCount += symbol;
+    }
+
+    public void updateLikeCount(int symbol) {this.likeCount += symbol;}
 }
