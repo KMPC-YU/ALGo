@@ -9,7 +9,6 @@ import com.kmpc.algobe.user.domain.dto.*;
 import com.kmpc.algobe.user.domain.entity.User;
 import com.kmpc.algobe.user.service.EmailService;
 import com.kmpc.algobe.user.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -26,7 +25,6 @@ import java.util.Objects;
 
 
 @Slf4j
-@Tag(name="User Controller", description = "회원인증 관련 컨트롤러")
 @RestController
 @Validated
 @RequiredArgsConstructor
@@ -46,13 +44,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
+    public ResponseEntity<UserInfoDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
         LoginResponseDto token = userService.login(loginRequestDto);
         JwtCookie jwtCookie = jwtProvider.setJwtCookie(token);
         return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE,
                 jwtCookie.getAccessCookie().toString(),
                 jwtCookie.getRefreshCookie().toString())
-                .body(token.getRole());
+                .body(token.getUserInfo());
     }
 
     @PostMapping("/emails")
@@ -162,9 +160,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경을 완료하였습니다.");
         else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 변경에 실패하였습니다.");
     }
-
-
-
-
-
 }
