@@ -1,5 +1,9 @@
 <template>
-  <h1>레시피 작성</h1>
+  <div class="container py-5">
+    <div class="row">
+      
+    </div>
+  </div>
 </template>
 
 <script>

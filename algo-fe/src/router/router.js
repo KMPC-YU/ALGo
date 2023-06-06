@@ -1,8 +1,4 @@
 import { createWebHistory, createRouter } from "vue-router"
-import Main from "@views/main/Main.vue"
-import Login from '@views/Login.vue'
-import FindPassword from '@views/findPassword/index.vue'
-import PostList from '@views/Post/PostList.vue'
 
 const router = createRouter({
     history : createWebHistory(),

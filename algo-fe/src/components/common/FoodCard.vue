@@ -8,6 +8,9 @@
       <a href="#">
         <h5 class="card-title fw-bold text-center">{{ name }}</h5>
       </a>
+      <div v-if="author" class="fw-bold text-center mb-2">
+        {{ author }}
+      </div>
       <div v-if="rating" class="rating mb-2 text-center">
         <i class="bi bi-star-fill text-warning"></i>
         <i class="bi bi-star-fill text-warning"></i>
@@ -42,6 +45,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    author: {
+      type: String,
+      default: false,
+    }
   }
 }
 </script>

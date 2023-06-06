@@ -19,7 +19,7 @@
                         <a class="nav-link" href="/foods">식품정보</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">레시피</a>
+                        <a class="nav-link" href="/recipes">레시피</a>
                     </li>
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
