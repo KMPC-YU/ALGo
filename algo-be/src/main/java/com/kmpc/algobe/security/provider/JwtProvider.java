@@ -4,6 +4,7 @@ import com.kmpc.algobe.redis.util.RedisUtil;
 import com.kmpc.algobe.security.config.Config;
 import com.kmpc.algobe.security.dto.JwtCookie;
 import com.kmpc.algobe.security.dto.LoginResponseDto;
+import com.kmpc.algobe.user.domain.dto.UserInfoDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -52,7 +53,7 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes(StandardCharsets.UTF_8))
                 .compact();
 
-        return LoginResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).role(role).build();
+        return LoginResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).userInfoDto(new UserInfoDto(nickname, role)).build();
     }
 
     public String regenerateToken(String refreshToken){
