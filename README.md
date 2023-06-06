@@ -6,7 +6,7 @@
 <div align="center">
     <img src='https://img.shields.io/badge/SpringBoot-3.0.4-brightgreen' alt="springboot">
     <img src='https://img.shields.io/badge/Vue-3.2.47-brightgreen' alt="vue">
-    <img src='https://img.shields.io/badge/Pinia-2.1.3-green' alt="pinia">
+    <img src='https://img.shields.io/badge/Vuex-4.1.0-green' alt="vuex">
     <img src='https://img.shields.io/badge/Bootstrap-5.3.0-blue' alt="bootstrap">
     <img src='https://img.shields.io/badge/Tiptap-2.0.3-blueviolet' alt="tiptap">
     <img src='https://img.shields.io/badge/SweetAlert-11.7.10-ff69b4' alt="sweetalert">
