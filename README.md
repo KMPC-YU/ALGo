@@ -14,6 +14,9 @@
     <img src='https://img.shields.io/badge/SweetAlert-11.7.10-ff69b4' alt="sweetalert">
 </div>
 
+## Notion
+[ALGo_notion](https://www.notion.so/dreamhack/ALGo-2023-397362c8a891411a975d1189b890be15)
+
 ## Introduction
 
 ALGo(알레르기 알고먹자)웹 서비스는 식품에 알레르기가 있는 사람들뿐만 아니라 식품의 알레르기 정보를 얻고자 하는 사람들에게 식품 정보를 제공해줍니다. 또한 레시피 페이지에서는 사용자들끼리 식품 레시피를 공유할 수 있으며, AI를 활용해 사용자에게 맞는 레시피를 추천받을 수 있습니다.
