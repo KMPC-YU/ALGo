@@ -29,8 +29,7 @@
                 <div class="col-9 mb-4">
                   <div class="row">
                     <div class="col-6">
-                      <select class="form-select">
-                        <option selected>종류별</option>
+                      <select v-model="selectType" class="form-select">
                         <option value="1">밑반찬</option>
                         <option value="2">메인반찬</option>
                         <option value="3">국/탕</option>
@@ -51,8 +50,7 @@
                       </select>
                     </div>
                     <div class="col-6">
-                      <select class="form-select">
-                        <option selected>상황별</option>
+                      <select v-model="selectCond" class="form-select">
                         <option value="1">일상</option>
                         <option value="2">초스피드</option>
                         <option value="3">손님접대</option>
@@ -79,8 +77,7 @@
                 <div class="col-9">
                   <div class="row">
                     <div class="col-4">
-                      <select class="form-select">
-                        <option selected>인원</option>
+                      <select v-model="selectAmount" class="form-select">
                         <option value="1">1인분</option>
                         <option value="2">2인분</option>
                         <option value="3">3인분</option>
@@ -90,8 +87,7 @@
                       </select>
                     </div>
                     <div class="col-4">
-                      <select class="form-select">
-                        <option selected>시간</option>
+                      <select v-model="selectTime" class="form-select">
                         <option value="1">5분 이내</option>
                         <option value="2">10분 이내</option>
                         <option value="3">15분 이내</option>
@@ -104,8 +100,7 @@
                       </select>
                     </div>
                     <div class="col-4">
-                      <select class="form-select">
-                        <option selected>난이도</option>
+                      <select v-model="selectLevel" class="form-select">
                         <option value="1">누구나</option>
                         <option value="2">초급</option>
                         <option value="3">중급</option>
@@ -142,22 +137,22 @@
               <label class="fs-4 mt-1">재료</label>
             </div>
             <div class="col-9">
-              <div v-for="item in ingredients" :key="item" class="row justify-content-center mb-2">
+              <div v-for="(item, idx) in ingredients" :key="item" class="row justify-content-center mb-2">
                 <div class="col-5">
-                  <input type="text" class="form-control" placeholder="예) 돼지고기" required>
+                  <input v-model="item.name" type="text" class="form-control" placeholder="예) 돼지고기" required>
                 </div>
                 <div class="col-3">
-                  <input type="text" class="form-control" placeholder="예) 150g">
+                  <input v-model="item.amount" type="text" class="form-control" placeholder="예) 150g">
                 </div>
                 <div class="col-3 ms-4">
                   <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary btn-sm mt-1">알레르기</button>
-                    <button type="button" class="btn btn-danger btn-sm mt-1">삭제</button>
+                    <button type="button" class="btn btn-danger btn-sm mt-1" @click="removeIngredient(idx)">삭제</button>
                   </div>
                 </div>
               </div>
               <div>
-                <button type="button" class="btn btn-success btn-sm mt-1">추가</button>
+                <button type="button" class="btn btn-success btn-sm mt-1" @click="addIngredient">추가</button>
               </div>
             </div>
           </div>
@@ -171,9 +166,9 @@
               <label class="fs-4 mt-5">순서</label>
             </div>
             <div class="col-9">
-              <div v-for="step in steps" :key="step" class="row justify-content-center mb-2">
+              <div v-for="(step, idx) in steps" :key="step" class="row justify-content-center mb-2">
                 <div class="col-7">
-                  <textarea class="form-control" required style="resize: none; height: 150px"></textarea>
+                  <textarea v-model="step.instruction" class="form-control" required style="resize: none; height: 150px"></textarea>
                 </div>
                 <div class="col-4 ms-4">
                   <div>
@@ -185,14 +180,17 @@
                       loading="lazy"
                     />
                   </div>
-                  <div class="btn-group text-center" role="group">
-                    <button type="button" class="btn btn-primary btn-sm">등록</button>
-                    <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                  <div class="text-center">
+                    <button type="button" class="btn btn-warning btn-sm me-2" @click="removeStep(idx)">순서삭제</button>
+                    <div class="btn-group text-center" role="group">
+                      <button type="button" class="btn btn-primary btn-sm">등록</button>
+                      <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                    </div>
                   </div>
                 </div>
               </div>
               <div>
-                <button type="button" class="btn btn-success btn-sm mt-1">추가</button>
+                <button type="button" class="btn btn-success btn-sm mt-1" @click="addStep">추가</button>
               </div>
             </div>
           </div>
@@ -243,7 +241,7 @@
               <label class="fs-4 mt-1">태그</label>
             </div>
             <div class="col-9 ps-4">
-              <input type="text" class="form-control" placeholder="입력할 태그를 띄어쓰기로 구분해주세요." required>
+              <Vue3TagsInput v-model="tags" limit="5"/>
             </div>
           </div>
         </div>
@@ -253,7 +251,7 @@
         <div class="card-body">
           <div class="text-center">
             <button class="btn btn-success mx-2" type="button">등록</button>
-            <button class="btn btn-secondary mx-2" type="button">취소</button>
+            <button class="btn btn-secondary mx-2" type="button" @click="gotoList">취소</button>
           </div>
         </div>
       </div>
@@ -262,9 +260,14 @@
 </template>
 
 <script>
+import router from "@/router/router.js"
+import Vue3TagsInput from 'vue3-tags-input'
 import { ref } from 'vue'
 
 export default {
+  components: {
+    Vue3TagsInput,
+  },
   setup() {
     const ingredients = ref([
       { name: '', amount: '' },
@@ -272,10 +275,37 @@ export default {
     const steps = ref([
       { instruction: '', photo: '' },
     ])
+    const tags = ref([])
+
+    const addIngredient = () => {
+      ingredients.value.push({ name: '', amount: '' })
+    }
+
+    const removeIngredient = (idx) => {
+      ingredients.value.splice(idx, 1)
+    }
+
+    const addStep = () => {
+      steps.value.push({ instruction: '', photo: '' })
+    }
+
+    const removeStep = (idx) => {
+      steps.value.splice(idx, 1)
+    }
+
+    const gotoList = () => {
+      router.go(-1)
+    }
 
     return {
       ingredients,
       steps,
+      tags,
+      addIngredient,
+      removeIngredient,
+      addStep,
+      removeStep,
+      gotoList,
     }
   }
 }
